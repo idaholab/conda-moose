@@ -1,0 +1,109 @@
+{% set version = "8.2.0" %}
+{% set build_number = 0 %}
+
+{% set minor_version = ".".join(version.split(".")[:2]) %}
+
+package:
+  name: moose-vtk
+  version: {{ version }}
+
+source:
+  url: http://www.vtk.org/files/release/{{ minor_version }}/VTK-{{ version }}.tar.gz
+  fn:  VTK-{{ version }}.tar.gz
+  sha256: 34c3dc775261be5e45a8049155f7228b6bd668106c72a3c435d95730d17d57bb
+  patches:
+    - 0001-Link-libpython-optionally-make-vtkPython-dep-compile.patch
+    - 0002-VTKGenerateExportHeader-Prefer-dumpversion-over-vers.patch
+    - 0003-py38.patch
+
+build:
+  skip: True  # [not osx]
+  number: {{ build_number }}
+
+requirements:
+  build:
+    - {{ compiler("cxx") }}
+    - cmake
+    - ninja
+
+  host:
+    - python {{ python }}
+    # VTK Third Party dependencies
+    - zlib
+    - freetype
+    - hdf5
+    - libxml2
+    - libpng
+    - jpeg
+    - libtiff
+    - jsoncpp
+    - expat
+    - tbb
+    - tbb-devel
+    - libnetcdf
+    - lz4-c
+    - boost-cpp
+
+  run:
+    - python {{ python }}
+    - future  # used in the generated python wrappers
+    # VTK Third Party dependencies
+    - zlib
+    - freetype
+    - hdf5
+    - libxml2
+    - libpng
+    - jpeg
+    - libtiff
+    - jsoncpp
+    - expat
+    - tbb
+    - libnetcdf
+    - lz4-c
+
+test:
+  imports:
+    - vtk
+    - vtk.vtkChartsCore
+    - vtk.vtkCommonCore
+    - vtk.vtkFiltersCore
+    - vtk.vtkFiltersGeneric
+    - vtk.vtkGeovisCore
+    - vtk.vtkFiltersHybrid
+    - vtk.vtkIOCore
+    - vtk.vtkImagingCore
+    - vtk.vtkInfovisCore
+    - vtk.vtkRenderingCore
+    - vtk.vtkViewsCore
+    - vtk.vtkRenderingVolume
+    - vtk.vtkInteractionWidgets
+    - vtkmodules
+    - vtkmodules.vtkChartsCore
+    - vtkmodules.vtkCommonCore
+    - vtkmodules.vtkFiltersCore
+    - vtkmodules.vtkFiltersGeneric
+    - vtkmodules.vtkGeovisCore
+    - vtkmodules.vtkFiltersHybrid
+    - vtkmodules.vtkIOCore
+    - vtkmodules.vtkImagingCore
+    - vtkmodules.vtkInfovisCore
+    - vtkmodules.vtkRenderingCore
+    - vtkmodules.vtkViewsCore
+    - vtkmodules.vtkRenderingVolume
+    - vtkmodules.vtkInteractionWidgets
+
+  requires:
+    - setuptools
+
+about:
+  home: http://www.vtk.org/
+  license: BSD 3-Clause
+  license_file: Copyright.txt
+  summary: >
+    The Visualization Toolkit (VTK) is an open-source, freely available software
+    system for 3D computer graphics, modeling, image processing, volume
+    rendering, scientific visualization, and information visualization.
+
+extra:
+  recipe-maintainers:
+    - milljm

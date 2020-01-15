@@ -1,0 +1,33 @@
+{% set name = "moose-env" %}
+{% set version = "2019.12.19" %}
+{% set sha256 = "1f9e83570f0670511998f609a2b4b3ddd5dc02563b052b6cd3af24a59452cece" %}
+
+package:
+  name: {{ name }}
+  version: {{ version }}
+
+source:
+  url: https://mooseframework.org/source_packages/moose-env.tar.gz
+  sha256: {{ sha256 }}
+
+build:
+  number: 0  # [linux,osx]
+  skip: true # [win]
+
+requirements:
+  run:
+    - moose-dev {{ moose_dev }}
+    - moose-python-deps {{ moose_python_deps }}
+
+test:
+  commands:
+    - test -f $PREFIX/share/moose-env
+
+about:
+  home: https://mooseframework.org/
+  license: LGPL 2.1
+  summary: 'The Multiphysics Object-Oriented Simulation Environment (MOOSE) is a finite-element, multiphysics framework primarily developed by Idaho National Laboratory. This superficial module (moose-env) acts as a top-level module designed to provide all dependencies required in order to build and run MOOSE-based applications.'
+
+extra:
+  recipe-maintainers:
+    - milljm
