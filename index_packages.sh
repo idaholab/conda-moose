@@ -23,3 +23,4 @@ function print_and_run()
 printf "Executing indexing command on mooseframework.org..."
 ssh -oStrictHostKeyChecking=no -q mooseframework.org "source /etc/profile; /var/moose/conda/index_channels.sh"
 exitIfReturnCode $?
+exit 0
