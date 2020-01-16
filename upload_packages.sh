@@ -37,11 +37,10 @@ if [ -z "$CONDA_PREFIX" ]; then
     exit 1
 fi
 
-if -d [ "${CONDA_PREFIX}/conda_envs/$CONDA_PACKAGE" ]; then
+if ! [ -d "${CONDA_PREFIX}" ]; then
     printf "CONDA_PACKAGE: $CONDA_PACKAGE directory is not where I am expecting it to be. Did someone change CONDA_PACKAGE= in the recipe?\n"
     exit 1
 fi
-export BZ2DIR="${CONDA_PREFIX}/conda_envs/${CONDA_PACKAGE}/conda-bld"
 
 # Get a topological sort of formulas we need to build
 FORMULAS=`./get_formulas.py`
@@ -60,7 +59,7 @@ if [ `uname` = 'Linux' ]; then
 else
     ARCH='osx-64'
 fi
-
+export BZ2DIR="${CONDA_PREFIX}/conda-bld/${ARCH}"
 
 # DARWIN ONLY: Delete any stale packages residing in rod:/raid/CONDA_MOOSE
 if [ "$ARCH" = 'osx-64' ]; then
@@ -73,14 +72,14 @@ for formula in ${FORMULAS}; do
     # DARWIN ONLY (firewall rules prevent pb-catalina from access mooseframework.org)
     if [ "$ARCH" = 'osx-64' ]; then
         # print what should be happening for Darwin machines, instead of printing all these 'scp to rod first' stuff
-        print_cmd "${BZ2DIR}/${ARCH}/${formula}*.bz2 mooseframework.org:/var/moose/conda/moose/${ARCH}/"
+        print_cmd "scp ${BZ2DIR}/${formula}*.bz2 mooseframework.org:/var/moose/conda/moose/${ARCH}/"
 
-        scp -q "${BZ2DIR}/${ARCH}/${formula}*.bz2 rod.inl.gov:/raid/CONDA_MOOSE/"
+        scp -q "${BZ2DIR}/${formula}*.bz2 rod.inl.gov:/raid/CONDA_MOOSE/"
         exitIfReturnCode $?
         ssh -oStrictHostKeyChecking=no -q rod.inl.gov "scp -q /raid/CONDA_MOOSE/${formula}*.bz2 mooseframework.org:/home/moosetest/"
         exitIfReturnCode $?
     else
-        print_and_run scp "${BZ2DIR}/${ARCH}/${formula}"*.bz2 mooseframework.org:/var/moose/conda/moose/${ARCH}/
+        print_and_run scp "${BZ2DIR}/${formula}"*.bz2 mooseframework.org:/var/moose/conda/moose/${ARCH}/
         exitIfReturnCode $?
     fi
 done
