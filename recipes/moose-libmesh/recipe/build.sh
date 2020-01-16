@@ -69,3 +69,4 @@ cat <<EOF > "${PREFIX}/etc/conda/deactivate.d/deactivate_${PKG_NAME}.sh"
 unset LIBMESH_DIR
 unset MOOSE_NO_CODESIGN
 EOF
+
