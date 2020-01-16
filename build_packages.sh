@@ -73,11 +73,13 @@ print_and_run conda build purge-all
 exitIfReturnCode $?
 
 for formula in ${FORMULAS}; do
-    printf "Building $(basename $formula)...\n"
-    print_and_run conda build -c https://mooseframework.org/conda/moose $formula
-    exitIfReturnCode $?
+    printf "Building $(basename $formula)...\nconda build -c https://mooseframework.org/conda/moose $formula\n"
+    conda build -c https://mooseframework.org/conda/moose $formula > possible_errors 2>&1
+    if [ $? -ne 0 ]; then
+        cat possible_errors
+        exit 1
+    fi
 done
-
 
 if [ `uname` = 'Linux' ]; then
     ARCH='linux-64'
