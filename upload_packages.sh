@@ -68,18 +68,19 @@ if [ "$ARCH" = 'osx-64' ]; then
 fi
 
 for formula in ${FORMULAS}; do
-    printf "Uploading ${formula}...\n"
+    bz_file=$(basename $formula)
+    printf "Uploading ${bz_file}...\n"
     # DARWIN ONLY (firewall rules prevent pb-catalina from access mooseframework.org)
     if [ "$ARCH" = 'osx-64' ]; then
         # print what should be happening for Darwin machines, instead of printing all these 'scp to rod first' stuff
-        print_cmd "scp ${BZ2DIR}/${formula}*.bz2 mooseframework.org:/var/moose/conda/moose/${ARCH}/"
+        print_cmd "scp ${BZ2DIR}/${bz_file}*.bz2 mooseframework.org:/var/moose/conda/moose/${ARCH}/"
 
-        scp -q "${BZ2DIR}/${formula}*.bz2 rod.inl.gov:/raid/CONDA_MOOSE/"
+        scp -q "${BZ2DIR}/${bz_file}*.bz2 rod.inl.gov:/raid/CONDA_MOOSE/"
         exitIfReturnCode $?
-        ssh -oStrictHostKeyChecking=no -q rod.inl.gov "scp -q /raid/CONDA_MOOSE/${formula}*.bz2 mooseframework.org:/home/moosetest/"
+        ssh -oStrictHostKeyChecking=no -q rod.inl.gov "scp -q /raid/CONDA_MOOSE/${bz_file}*.bz2 mooseframework.org:/home/moosetest/"
         exitIfReturnCode $?
     else
-        print_and_run scp "${BZ2DIR}/${formula}"*.bz2 mooseframework.org:/var/moose/conda/moose/${ARCH}/
+        print_and_run scp "${BZ2DIR}/${bz_file}"*.bz2 mooseframework.org:/var/moose/conda/moose/${ARCH}/
         exitIfReturnCode $?
     fi
 done
