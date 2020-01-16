@@ -77,7 +77,7 @@ for formula in ${FORMULAS}; do
 
         scp -q "${BZ2DIR}/${bz_file}"*.bz2 rod.inl.gov:/raid/CONDA_MOOSE/
         exitIfReturnCode $?
-        ssh -oStrictHostKeyChecking=no -q rod.inl.gov "scp -q /raid/CONDA_MOOSE/${bz_file}"*.bz2 mooseframework.org:/home/moosetest/
+        ssh -oStrictHostKeyChecking=no -q rod.inl.gov "scp -q /raid/CONDA_MOOSE/${bz_file}"*.bz2 mooseframework.org:/var/moose/conda/moose/${ARCH}/
         exitIfReturnCode $?
     else
         print_and_run scp "${BZ2DIR}/${bz_file}"*.bz2 mooseframework.org:/var/moose/conda/moose/${ARCH}/
