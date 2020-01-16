@@ -49,36 +49,14 @@ if [ -z "${FORMULAS}" ]; then
     exit 0
 fi
 
-# Warn if recipe changes may result in broken dependencies (not necessarily bad...
-# As this can mean we have a libMesh update, that we do not wish to force on the
-# public yet)
-
-if [ "${FORMULAS}" != "${NECESSARY}" ]; then
-    printf "Warning:
-\tNot all recipes necessary in the dependency chain are going to
-\tbe built! This may be fine if intentionally preventing something
-\tfrom reaching certain users (like a libMesh update to moose-env
-\tusers).\n\nBuilding only:\n"
-
-    for formula in ${FORMULAS}; do
-        printf "\t$(basename $formula)\n"
-    done
-    printf "\nWhile the dependency chain is:\n"
-    for formula in ${NECESSARY}; do
-        printf "\t$(basename $formula)\n"
-    done
-    printf "\n"
+if [ `uname` = 'Linux' ]; then
+    ARCH='linux-64'
+else
+    ARCH='osx-64'
 fi
 
-# Clear any previous build environment
-print_and_run conda build purge-all
-exitIfReturnCode $?
-
 for formula in ${FORMULAS}; do
-    printf "Building $(basename $formula)...\nconda build -c https://mooseframework.org/conda/moose $formula\n"
-    conda build -c https://mooseframework.org/conda/moose $formula > possible_errors 2>&1
-    if [ $? -ne 0 ]; then
-        cat possible_errors
-        exit 1
-    fi
+    printf "Uploading ${formula}...\n"
+    print_and_run scp "${CONDA_PREFIX}/conda-bld/${ARCH}/${formula}"*.bz2 mooseframework.org:/var/moose/conda/moose/${ARCH}/
+    exitIfReturnCode $?
 done
