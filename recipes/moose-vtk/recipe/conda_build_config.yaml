@@ -16,3 +16,4 @@ VTK_WITH_OSMESA:
 
 python:
   - 3.7
+  - 3.6
