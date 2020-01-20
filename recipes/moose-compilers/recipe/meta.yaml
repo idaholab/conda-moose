@@ -20,7 +20,6 @@ requirements:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
     - {{ compiler('fortran') }}
-    - python {{ python }}
     - libpng
     - clang-tools  # [osx]
 

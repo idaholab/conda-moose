@@ -1,9 +1,2 @@
 moose_pylatexenc:
   - 2.1
-
-python:
-  - 3.7
-  - 3.6
-
-pin_run_as_build:
-  python: x.x

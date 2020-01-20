@@ -16,7 +16,6 @@ build:
 
 requirements:
   run:
-    - python {{ python }}
     - pyqt
     - matplotlib
     - pandas
