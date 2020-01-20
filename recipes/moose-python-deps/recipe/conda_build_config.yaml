@@ -4,3 +4,6 @@ moose_pylatexenc:
 python:
   - 3.7
   - 3.6
+
+pin_run_as_build:
+  python: x.x
