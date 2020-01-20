@@ -3,4 +3,4 @@ moose_pylatexenc:
 
 python:
   - 3.7
-
+  - 3.6

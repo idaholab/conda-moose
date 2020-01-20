@@ -28,7 +28,6 @@ requirements:
     - mock
     - lxml
     - scikit-image
-    - moose-vtk                               # [osx]
     - vtk                                     # [linux]
     - moose-pylatexenc {{ moose_pylatexenc }}
 

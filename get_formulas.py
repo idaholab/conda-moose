@@ -8,7 +8,7 @@ def getModified(args):
     file_list = git_process.communicate()[0].decode('utf-8').split()
     formula_files = set([])
     for f_file in file_list:
-        if f_file.split(os.path.sep)[0] == 'recipes':
+        if f_file.split(os.path.sep)[0] == 'recipes' and os.path.exists(f_file):
             formula_files.add(os.path.join(*f_file.split(os.path.sep)[:2], 'recipe'))
     return formula_files
 
