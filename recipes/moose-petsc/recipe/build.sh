@@ -69,7 +69,6 @@ python ./configure \
   --download-parmetis=1 \
   --download-superlu_dist=1 \
   --download-mumps=1 \
-  --download-scalapack=1 \
   --download-slepc=git://https://gitlab.com/slepc/slepc.git \
   --download-slepc-commit=v3.11 \
   --with-sowing=0 \

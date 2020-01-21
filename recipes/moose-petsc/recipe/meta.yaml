@@ -22,7 +22,7 @@ build:
 requirements:
   build:
     - moose-compilers
-    - python
+    - python {{ python }}
     - pkg-config
 
   host:
