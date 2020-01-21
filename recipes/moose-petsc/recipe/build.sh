@@ -47,7 +47,7 @@ python ./configure \
   CXXFLAGS="$CXXFLAGS" \
   FFLAGS="$FFLAGS" \
   LDFLAGS="$LDFLAGS" \
-  LIBS="$LIBS" \
+  LIBS="${LIBS:-}" \
   --with-x=0 \
   --with-ssl=0 \
   --COPTFLAGS=-O3 \
