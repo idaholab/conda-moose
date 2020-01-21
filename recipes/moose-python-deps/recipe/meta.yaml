@@ -29,6 +29,7 @@ requirements:
     - scikit-image
     - vtk                                     # [linux]
     - pylatexenc
+    - python {{ python }}
 
 test:
   commands:
