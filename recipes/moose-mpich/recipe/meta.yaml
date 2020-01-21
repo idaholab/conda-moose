@@ -2,7 +2,6 @@
 {% set build = 0 %}
 
 package:
-  # must not match any outputs for requirements to be handled correctly
   name: mpich-mpi
   version: {{ version }}
 

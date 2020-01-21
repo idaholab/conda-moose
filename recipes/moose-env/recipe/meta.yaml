@@ -16,8 +16,8 @@ build:
 
 requirements:
   run:
-    - moose-dev
-    - moose-python-deps
+    - moose-dev {{ moose_dev }}
+    - moose-python-deps {{ moose_python_deps }}
 
 test:
   commands:
