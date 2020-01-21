@@ -26,3 +26,6 @@ cctools:
 
 ld64:
   - 409
+
+mpi:
+ - moose_mpich
