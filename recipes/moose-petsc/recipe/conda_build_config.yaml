@@ -12,3 +12,6 @@ MACOSX_DEPLOYMENT_TARGET:      # [osx]
 
 mpi:
  - moose_mpich
+
+moose_compilers:
+ - 2020.01.21
