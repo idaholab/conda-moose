@@ -68,6 +68,12 @@ if [ "${FORMULAS}" != "${NECESSARY}" ]; then
         printf "\t$(basename $formula)\n"
     done
     printf "\n"
+else
+    printf "building formulas:\n"
+    for formula in ${FORMULAS}; do
+        printf "\t$(basename $formula)\n"
+    done
+    printf "\n"
 fi
 
 # Clear any previous build environment
