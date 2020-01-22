@@ -10,8 +10,5 @@ macos_machine:                 # [osx]
 MACOSX_DEPLOYMENT_TARGET:      # [osx]
   - 10.9                       # [osx]
 
-moose_compilers:
-  - 2019.12.5
-
 mpi:
-  - moose-mpich
+ - moose_mpich

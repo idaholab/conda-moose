@@ -53,7 +53,7 @@ fi
 # As this can mean we have a libMesh update, that we do not wish to force on the
 # public yet)
 
-if [ "${FORMULAS}" != "${NECESSARY}" ]; then
+if [ "$(echo ${FORMULAS} | wc -w)" != "$(echo ${NECESSARY} | wc -w)" ]; then
     printf "Warning:
 \tNot all recipes necessary in the dependency chain are going to
 \tbe built! This may be fine if intentionally preventing something
@@ -65,6 +65,12 @@ if [ "${FORMULAS}" != "${NECESSARY}" ]; then
     done
     printf "\nWhile the dependency chain is:\n"
     for formula in ${NECESSARY}; do
+        printf "\t$(basename $formula)\n"
+    done
+    printf "\n"
+else
+    printf "building formulas:\n"
+    for formula in ${FORMULAS}; do
         printf "\t$(basename $formula)\n"
     done
     printf "\n"

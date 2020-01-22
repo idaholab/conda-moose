@@ -23,4 +23,4 @@ MACOSX_DEPLOYMENT_TARGET:      # [osx]
   - 10.9                       # [osx]
 
 mpi:
-  - moose-mpich
+ - moose_mpich

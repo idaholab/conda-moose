@@ -47,32 +47,32 @@ python ./configure \
   CXXFLAGS="$CXXFLAGS" \
   FFLAGS="$FFLAGS" \
   LDFLAGS="$LDFLAGS" \
-  LIBS="$LIBS" \
-  --with-x=0 \
-  --with-ssl=0 \
+  LIBS="${LIBS:-}" \
   --COPTFLAGS=-O3 \
   --CXXOPTFLAGS=-O3 \
   --FOPTFLAGS=-O3 \
   --with-clib-autodetect=0 \
   --with-cxxlib-autodetect=0 \
   --with-fortranlib-autodetect=0 \
+  --with-debugging=0 \
   --with-blas-lib=libblas${SHLIB_EXT} \
   --with-lapack-lib=liblapack${SHLIB_EXT} \
+  --with-hwloc=0 \
   --with-mpi=1 \
-  --with-cxx-dialect=C++11 \
-  --with-fortran-bindings=0 \
-  --with-debugging=0 \
-  --with-shared-libraries=1 \
+  --with-pthread=1 \
+  --with-shared-libraries \
+  --with-scalapack=1 \
+  --with-mumps=1 \
+  --with-ssl=0 \
+  --with-x=0 \
   --download-hypre=1 \
   --download-metis=1 \
-  --download-ptscotch=1 \
+  --download-superlu=1 \
   --download-parmetis=1 \
+  --download-ptscotch=1 \
+  --download-suitesparse=1 \
+  --with-cxx-dialect=C++11 \
   --download-superlu_dist=1 \
-  --download-mumps=1 \
-  --download-scalapack=1 \
-  --download-slepc=git://https://gitlab.com/slepc/slepc.git \
-  --download-slepc-commit=v3.11 \
-  --with-sowing=0 \
   --prefix=$PETSC_PREFIX || (cat configure.log && exit 1)
 
 # Verify that gcc_ext isn't linked

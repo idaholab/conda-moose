@@ -1,6 +1,6 @@
 {% set name = "moose-libmesh" %}
 {% set version = "81589c1acb86765a0a1981b7fef5328e91fb92ab" %}
-{% set friendly_version = "2019.12.19" %}
+{% set friendly_version = "2020.01.21" %}
 {% set sha256 = "8f37b5d52ad764f8da5594a7b608fd8df6836038c0c187046861307cca0345bf" %}
 {% set metaphysicl_version = "78f338a1508b4010a39a34d9fec9ee6247afaecf" %}
 {% set metaphysicl_sha256 = "30ead616f1aad634ce270db2688f8c2b799a1f3b6a2f726a3bbf5abe1f923ac7" %}
@@ -26,14 +26,14 @@ build:
 requirements:
   build:
     - pkg-config
-    - moose-petsc {{ moose_petsc }}
-    - moose-libmesh-vtk {{ moose_libmesh_vtk }}
+    - moose-petsc
+    - moose-libmesh-vtk
     - cctools                                           # [osx]
     - ld64                                              # [osx]
 
   run:
-    - moose-petsc {{ moose_petsc }}
-    - moose-libmesh-vtk {{ moose_libmesh_vtk }}
+    - moose-petsc
+    - moose-libmesh-vtk
 
 test:
   commands:
