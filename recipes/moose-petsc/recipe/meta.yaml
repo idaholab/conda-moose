@@ -29,6 +29,8 @@ requirements:
     - libblas
     - libcblas
     - liblapack
+    - scalapack
+    - mumps-mpi
     - cmake
     - moose-mpich
 

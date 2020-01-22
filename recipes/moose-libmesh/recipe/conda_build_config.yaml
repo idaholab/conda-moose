@@ -11,4 +11,12 @@ MACOSX_DEPLOYMENT_TARGET:      # [osx]
   - 10.9                       # [osx]
 
 mpi:
- - moose_mpich
+  - moose_mpich
+
+moose_libmesh_vtk:
+  - 8.2.0 # [osx]
+  - 6.3.0 # [linux]
+
+SHORT_VTK_NAME:
+  - 8.2 # [osx]
+  - 6.3 # [linux]
