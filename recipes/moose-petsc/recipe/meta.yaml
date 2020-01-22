@@ -21,23 +21,26 @@ build:
 
 requirements:
   build:
-    - moose-compilers {{ moose_compilers }}
+    - moose-compilers
+    - python {{ python }}
     - pkg-config
 
   host:
     - libblas
     - libcblas
     - liblapack
+    - scalapack
+    - mumps-mpi
     - cmake
     - moose-mpich
 
   run:
-    - moose-compilers {{ moose_compilers }}
+    - moose-compilers
 
 test:
   requires:
     - pkg-config
-    - moose-compilers {{ moose_compilers }}
+    - moose-compilers
 
   files:
     - tests/ex1.c

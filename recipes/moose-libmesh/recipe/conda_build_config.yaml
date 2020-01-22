@@ -10,8 +10,8 @@ macos_machine:                 # [osx]
 MACOSX_DEPLOYMENT_TARGET:      # [osx]
   - 10.9                       # [osx]
 
-moose_petsc:
-  - 3.11.4
+mpi:
+  - moose_mpich
 
 moose_libmesh_vtk:
   - 8.2.0 # [osx]
@@ -20,12 +20,3 @@ moose_libmesh_vtk:
 SHORT_VTK_NAME:
   - 8.2 # [osx]
   - 6.3 # [linux]
-
-cctools:
-  - 921
-
-ld64:
-  - 409
-
-mpi:
-  - moose-mpich

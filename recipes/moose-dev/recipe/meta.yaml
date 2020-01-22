@@ -16,7 +16,7 @@ build:
 
 requirements:
   run:
-    - moose-libmesh {{ moose_libmesh }}
+    - moose-libmesh
 
 test:
   commands:
