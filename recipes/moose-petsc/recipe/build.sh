@@ -65,9 +65,9 @@ python ./configure \
   --with-mumps=1 \
   --with-ssl=0 \
   --with-x=0 \
-  --with-sowing=0 \
   --download-hypre=1 \
   --download-metis=1 \
+  --download-sowing=1 \
   --download-superlu=1 \
   --download-parmetis=1 \
   --download-ptscotch=1 \
