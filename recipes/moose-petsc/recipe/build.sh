@@ -73,8 +73,6 @@ python ./configure \
   --download-suitesparse=1 \
   --with-cxx-dialect=C++11 \
   --download-superlu_dist=1 \
-  --download-slepc=git://https://gitlab.com/slepc/slepc.git \
-  --download-slepc-commit=v3.11 \
   --prefix=$PETSC_PREFIX || (cat configure.log && exit 1)
 
 # Verify that gcc_ext isn't linked
