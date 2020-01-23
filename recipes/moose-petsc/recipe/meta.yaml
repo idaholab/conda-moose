@@ -21,8 +21,10 @@ build:
 
 requirements:
   build:
-    - moose-compilers
-    - python {{ python }}
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
+    - {{ compiler('fortran') }}
+    - python
     - pkg-config
 
   host:
@@ -32,15 +34,19 @@ requirements:
     - scalapack
     - mumps-mpi
     - cmake
-    - moose-mpich
+    - {{ mpi }}
 
   run:
-    - moose-compilers
+    - {{ mpi }}
+    - mumps-mpi
+    - scalapack
 
 test:
   requires:
     - pkg-config
-    - moose-compilers
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
+    - {{ compiler('fortran') }}
 
   files:
     - tests/ex1.c
