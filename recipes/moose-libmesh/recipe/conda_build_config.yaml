@@ -20,3 +20,10 @@ moose_libmesh_vtk:
 SHORT_VTK_NAME:
   - 8.2 # [osx]
   - 6.3 # [linux]
+
+moose_petsc:
+ - 3.11.4
+
+pin_run_as_build:
+  moose_petsc: x.x.x
+  moose_libmesh_vtk: x.x.x
