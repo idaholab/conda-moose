@@ -77,9 +77,12 @@ for formula in ${FORMULAS}; do
 
         scp -q "${BZ2DIR}/${bz_file}"*.bz2 rod.inl.gov:/raid/CONDA_MOOSE/
         exitIfReturnCode $?
-        ssh -oStrictHostKeyChecking=no -q rod.inl.gov "scp -q /raid/CONDA_MOOSE/${bz_file}"*.bz2 mooseframework.org:/var/moose/conda/moose/${ARCH}/
+        ssh -oStrictHostKeyChecking=no -q rod.inl.gov "ssh -q mooseframework.org mkdir -p /var/moose/conda/moose/${ARCH}; scp -q /raid/CONDA_MOOSE/${bz_file}"*.bz2 mooseframework.org:/var/moose/conda/moose/${ARCH}/
         exitIfReturnCode $?
+
+    # We are on rod.inl.gov
     else
+        ssh -q mooseframework.org mkdir -p /var/moose/conda/moose/${ARCH}
         print_and_run scp "${BZ2DIR}/${bz_file}"*.bz2 mooseframework.org:/var/moose/conda/moose/${ARCH}/
         exitIfReturnCode $?
     fi
