@@ -20,7 +20,7 @@ requirements:
     - libpng
     - clang
     - clang-tools
-    - clang-dev
+    - clangdev
     - clangxx
     - libclang
     - python-clang
