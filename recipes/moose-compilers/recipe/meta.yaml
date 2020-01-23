@@ -17,11 +17,13 @@ build:
 requirements:
   run:
     - moose-mpich
-    - {{ compiler('c') }}
-    - {{ compiler('cxx') }}
-    - {{ compiler('fortran') }}
     - libpng
-    - clang-tools  # [osx]
+    - clang
+    - clang-tools
+    - clangdev
+    - clangxx
+    - libclang
+    - python-clang
 
 test:
   commands:
@@ -30,7 +32,7 @@ test:
 about:
   home: https://mooseframework.org/
   license: LGPL 2.1
-  summary: 'This superficial module (moose-compilers) acts as a top-level module designed to provide all dependencies required in order to build the dependencies necessary to support MOOSE based developement.'
+  summary: 'This superficial module (moose-compilers) acts as a top-level module designed to provide all dependencies required in order to build and support MOOSE based developement.'
 
 extra:
   recipe-maintainers:

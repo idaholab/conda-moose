@@ -27,7 +27,7 @@ requirements:
     - mock
     - lxml
     - scikit-image
-    - vtk                                     # [linux]
+    - vtk
     - pylatexenc
     - jinja2
     - python {{ python }}
@@ -39,7 +39,7 @@ test:
 about:
   home: https://mooseframework.org/
   license: LGPL 2.1
-  summary: 'This superficial module (peacock) acts as a top-level module designed to provide all dependencies required in order to run Peacock and MOOSE Documentation.'
+  summary: 'This superficial module (moose-python-deps) acts as a top-level module designed to provide all dependencies required in order to run Peacock and MOOSE Documentation.'
 
 extra:
   recipe-maintainers:

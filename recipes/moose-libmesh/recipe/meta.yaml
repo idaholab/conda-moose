@@ -25,6 +25,9 @@ build:
 
 requirements:
   build:
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
+    - {{ compiler('fortran') }}
     - pkg-config
     - moose-petsc
     - moose-libmesh-vtk
