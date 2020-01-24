@@ -1,5 +1,5 @@
-{% set name = "moose-python-deps" %}
-{% set version = "2020.01.21" %}
+{% set name = "moose-tools" %}
+{% set version = "2020.01.24" %}
 {% set sha256 = "3a12dc808c116f6593f7c95519ed2410b3e61bde9c3b426a58c07c7f6a6dd4c2" %}
 
 package:
@@ -36,12 +36,12 @@ requirements:
 
 test:
   commands:
-    - test -f $PREFIX/share/moose-python-deps
+    - test -f $PREFIX/share/moose-tools
 
 about:
   home: https://mooseframework.org/
   license: LGPL 2.1
-  summary: 'This superficial module (moose-python-deps) acts as a top-level module designed to provide all dependencies required in order to run Peacock and MOOSE Documentation.'
+  summary: 'This superficial module (moose-tools) acts as a top-level module designed to provide all dependencies required in order to run Peacock and MOOSE Documentation.'
 
 extra:
   recipe-maintainers:

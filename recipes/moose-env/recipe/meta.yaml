@@ -16,10 +16,10 @@ build:
 
 requirements:
   build:
-    - moose-dev {{ moose_dev }}
+    - moose-libmesh {{ moose_libmesh }}
+
   run:
-    - moose-dev
-    - moose-python-deps
+    - moose-libmesh
 
 test:
   commands:

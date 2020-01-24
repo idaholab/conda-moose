@@ -16,9 +16,11 @@ build:
 
 requirements:
   build:
-    - moose-libmesh {{ moose_libmesh }}
+    - moose-petsc {{ moose_petsc }}
+    - moose-tools {{ moose_tools }}
   run:
-    - moose-libmesh
+    - moose-petsc
+    - moose-tools
 
 test:
   commands:

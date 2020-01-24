@@ -25,17 +25,14 @@ build:
 
 requirements:
   build:
-    - {{ compiler('c') }}
-    - {{ compiler('cxx') }}
-    - {{ compiler('fortran') }}
     - pkg-config
-    - moose-petsc {{ moose_petsc }}
-    - moose-libmesh-vtk {{ moose_libmesh_vtk }}
     - cctools                                           # [osx]
     - ld64                                              # [osx]
+    - moose-dev {{ moose_dev }}
+    - moose-libmesh-vtk {{ moose_libmesh_vtk }}
 
   run:
-    - moose-petsc
+    - moose-dev
     - moose-libmesh-vtk
 
 test:
