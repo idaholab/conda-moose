@@ -1,8 +1,6 @@
 #!/bin/bash
 set -eu
-
 ./install.py -f -d ${PREFIX} -p ${PREFIX}
-
 mkdir -p "${PREFIX}/etc/conda/activate.d" "${PREFIX}/etc/conda/deactivate.d"
 cat <<EOF > "${PREFIX}/etc/conda/activate.d/activate_${PKG_NAME}.sh"
 export AUTOJUMP_SHELL=\`ps -o comm= \$\$ | sed -e 's/-//'\`
