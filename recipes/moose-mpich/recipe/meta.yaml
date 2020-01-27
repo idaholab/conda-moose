@@ -14,6 +14,10 @@ build:
   number: {{ build }}
   skip: True  # [win]
 
+requirements:
+  run:
+    - moose-compilers {{ moose_compilers }}
+
 outputs:
   - name: moose-mpich
     script: build-mpi.sh
