@@ -28,6 +28,7 @@ outputs:
         - make  # [unix]
       host: []
       run:
+        - moose-compilers {{ moose_compilers }}
         - mpi 1.0 mpich
     test:
       script: run_test.sh

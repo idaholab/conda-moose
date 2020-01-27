@@ -1,5 +1,5 @@
 {% set name = "moose-dev" %}
-{% set version = "2020.01.23" %}
+{% set version = "2020.01.24" %}
 {% set sha256 = "60ccefaa5220e8b7608bc8fccdbf5a84fd9c50e6ca6c39ba5a121454a47313f8" %}
 
 package:
@@ -16,9 +16,11 @@ build:
 
 requirements:
   build:
-    - moose-libmesh {{ moose_libmesh }}
+    - moose-petsc {{ moose_petsc }}
+    - moose-tools {{ moose_tools }}
   run:
-    - moose-libmesh
+    - moose-petsc
+    - moose-tools
 
 test:
   commands:
