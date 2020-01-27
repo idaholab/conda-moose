@@ -17,7 +17,7 @@ build:
 requirements:
   build:
     - {{ compiler('cxx') }}
-    - moose-mpich
+    - moose-mpich {{ moose_mpich }}
     - cmake
     - ninja
     - libglu                            # [linux]
@@ -31,6 +31,7 @@ requirements:
     - {{ cdt('xorg-x11-proto-devel') }} # [linux]
 
   run:
+    - moose-mpich
     - libglu                            # [linux]
     - mesalib                           # [linux]
     - {{ cdt('libxt-devel') }}          # [linux]

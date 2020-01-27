@@ -21,9 +21,7 @@ build:
 
 requirements:
   build:
-    - {{ compiler('c') }}
-    - {{ compiler('cxx') }}
-    - {{ compiler('fortran') }}
+    - moose-mpich {{ moose_mpich }}
     - python
     - pkg-config
 
@@ -32,12 +30,14 @@ requirements:
     - libcblas
     - liblapack
     - scalapack
+    - moose-mpich
     - mumps-mpi
     - cmake
     - {{ mpi }}
 
   run:
     - {{ mpi }}
+    - moose-mpich
     - mumps-mpi
     - scalapack
 

@@ -13,17 +13,17 @@ MACOSX_DEPLOYMENT_TARGET:      # [osx]
 mpi:
   - moose_mpich
 
-moose_libmesh_vtk:
-  - 8.2.0 # [osx]
-  - 6.3.0 # [linux]
-
 SHORT_VTK_NAME:
   - 8.2 # [osx]
   - 6.3 # [linux]
 
-moose_petsc:
- - 3.11.4
+moose_dev:
+ - 2020.01.24
+
+moose_libmesh_vtk:
+  - 8.2.0 # [osx]
+  - 6.3.0 # [linux]
 
 pin_run_as_build:
-  moose_petsc: x.x.x
+  moose_dev: x.x.x
   moose_libmesh_vtk: x.x.x
