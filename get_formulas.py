@@ -58,8 +58,8 @@ def verifyArgs(args):
 
 def parseArguments(args=None):
     parser = argparse.ArgumentParser(description='Conda Recipe Dependency Generator',
-                                     epilog='Use with no arguments to return only changed recipes.')
-    parser.add_argument('-d', '--dependencies', action='store_const', const=True, default=False, help='Prints all recipes requiring modifications (its dependencies) based on current recipe modifications.')
+                                     epilog='Prints recipes with changes, in the order that they need to be built, in relation to the master branch.')
+    parser.add_argument('-d', '--dependencies', action='store_const', const=True, default=False, help='Prints all recipes requiring review, or modification for a proper dependency chain build. This should be used to give the user an idea on what recipes they should, at the very least, look over and identify if that dependency needs modification.')
     parser.add_argument('-r', '--reverse', action='store_const', const=True, default=False, help='Reverse dependency order')
     return verifyArgs(parser.parse_args(args))
 
