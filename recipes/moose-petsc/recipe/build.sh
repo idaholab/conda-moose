@@ -36,7 +36,7 @@ if [[ $mpi == "openmpi" ]]; then
 elif [[ $mpi == "moose-mpich" ]]; then
   export HYDRA_LAUNCHER=fork
 fi
-export PETSC_PREFIX=${PREFIX}/petsc
+
 python ./configure \
   AR="${AR:-ar}" \
   CC="mpicc" \
@@ -47,33 +47,32 @@ python ./configure \
   CXXFLAGS="$CXXFLAGS" \
   FFLAGS="$FFLAGS" \
   LDFLAGS="$LDFLAGS" \
-  LIBS="${LIBS:-}" \
+  LIBS="$LIBS" \
+  --with-x=0 \
+  --with-ssl=0 \
   --COPTFLAGS=-O3 \
   --CXXOPTFLAGS=-O3 \
   --FOPTFLAGS=-O3 \
   --with-clib-autodetect=0 \
   --with-cxxlib-autodetect=0 \
   --with-fortranlib-autodetect=0 \
-  --with-debugging=0 \
   --with-blas-lib=libblas${SHLIB_EXT} \
   --with-lapack-lib=liblapack${SHLIB_EXT} \
-  --with-hwloc=0 \
   --with-mpi=1 \
-  --with-pthread=1 \
-  --with-shared-libraries \
-  --with-scalapack=1 \
-  --with-mumps=1 \
-  --with-ssl=0 \
-  --with-x=0 \
+  --with-cxx-dialect=C++11 \
+  --with-fortran-bindings=0 \
+  --with-debugging=0 \
+  --with-shared-libraries=1 \
   --download-hypre=1 \
   --download-metis=1 \
-  --download-superlu=1 \
-  --download-parmetis=1 \
   --download-ptscotch=1 \
-  --download-suitesparse=1 \
-  --with-cxx-dialect=C++11 \
+  --download-parmetis=1 \
   --download-superlu_dist=1 \
-  --prefix=$PETSC_PREFIX || (cat configure.log && exit 1)
+  --download-mumps=1 \
+  --download-scalapack=1 \
+  --download-slepc \
+  --with-sowing=0 \
+  --prefix=$PREFIX || (cat configure.log && exit 1)
 
 # Verify that gcc_ext isn't linked
 for f in $PETSC_ARCH/lib/petsc/conf/petscvariables $PETSC_ARCH/lib/pkgconfig/PETSc.pc; do
@@ -100,7 +99,7 @@ sedinplace "s%${BUILD_PREFIX}/bin/python%/usr/bin/env python%g" $PETSC_ARCH/lib/
 for path in $PETSC_DIR $BUILD_PREFIX; do
     for f in $(grep -l "${path}" $PETSC_ARCH/include/petsc*.h); do
         echo "Fixing ${path} in $f"
-        sedinplace s%$path%\${PETSC_PREFIX}%g $f
+        sedinplace s%$path%\${PREFIX}%g $f
     done
 done
 
@@ -114,28 +113,27 @@ make check MPIEXEC="${RECIPE_DIR}/mpiexec.sh"
 make install
 
 # Remove unneeded files
-rm -f ${PETSC_PREFIX}/lib/petsc/conf/configure-hash
-find ${PETSC_PREFIX}/lib/petsc -name '*.pyc' -delete
+rm -f ${PREFIX}/lib/petsc/conf/configure-hash
+find $PREFIX/lib/petsc -name '*.pyc' -delete
 
 # Replace ${BUILD_PREFIX} after installation,
 # otherwise 'make install' above may fail
-for f in $(grep -l "${BUILD_PREFIX}" -R "${PETSC_PREFIX}/lib/petsc"); do
+for f in $(grep -l "${BUILD_PREFIX}" -R "${PREFIX}/lib/petsc"); do
   echo "Fixing ${BUILD_PREFIX} in $f"
-  sedinplace s%${BUILD_PREFIX}%${PETSC_PREFIX}%g $f
+  sedinplace s%${BUILD_PREFIX}%${PREFIX}%g $f
 done
 
 echo "Removing example files"
-du -hs $PETSC_PREFIX/share/petsc/examples/src
-rm -fr $PETSC_PREFIX/share/petsc/examples/src
+du -hs $PREFIX/share/petsc/examples/src
+rm -fr $PREFIX/share/petsc/examples/src
 echo "Removing data files"
-du -hs $PETSC_PREFIX/share/petsc/datafiles/*
-rm -fr $PETSC_PREFIX/share/petsc/datafiles
+du -hs $PREFIX/share/petsc/datafiles/*
+rm -fr $PREFIX/share/petsc/datafiles
 
 # Set PETSC_DIR environment variable for those that need it
 mkdir -p "${PREFIX}/etc/conda/activate.d" "${PREFIX}/etc/conda/deactivate.d"
 cat <<EOF > "${PREFIX}/etc/conda/activate.d/activate_${PKG_NAME}.sh"
-export PETSC_DIR=${PETSC_PREFIX}
-export PKG_CONFIG_PATH=${PETSC_PREFIX}/lib/pkgconfig:${PKG_CONFIG_PATH}
+export PETSC_DIR=${PREFIX}
 EOF
 cat <<EOF > "${PREFIX}/etc/conda/deactivate.d/deactivate_${PKG_NAME}.sh"
 unset PETSC_DIR
