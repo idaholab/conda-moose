@@ -11,7 +11,7 @@ MACOSX_DEPLOYMENT_TARGET:      # [osx]
   - 10.9                       # [osx]
 
 mpi:
-  - moose_mpich
+  - moose-mpich
 
 SHORT_VTK_NAME:
   - 8.2 # [osx]
