@@ -22,31 +22,22 @@ build:
 requirements:
   build:
     - moose-mpich {{ moose_mpich }}
-    - python
     - pkg-config
 
   host:
     - libblas
     - libcblas
     - liblapack
-    - scalapack
-    - moose-mpich
-    - mumps-mpi
     - cmake
-    - {{ mpi }}
+    - moose-mpich
 
   run:
-    - {{ mpi }}
-    - moose-mpich
-    - mumps-mpi
-    - scalapack
+    - moose-mpich {{ moose_mpich }}
 
 test:
   requires:
     - pkg-config
-    - {{ compiler('c') }}
-    - {{ compiler('cxx') }}
-    - {{ compiler('fortran') }}
+    - moose-mpich {{ moose_mpich }}
 
   files:
     - tests/ex1.c

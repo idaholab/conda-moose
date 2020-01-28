@@ -1,14 +1,11 @@
 vtk_version:
-  - 8.2.0 # [osx]
-  - 6.3.0 # [linux]
+  - 6.3.0
 
 friendly_version:
-  - 8.2 # [osx]
-  - 6.3 # [linux]
+  - 6.3
 
 sha256:
-  - 34c3dc775261be5e45a8049155f7228b6bd668106c72a3c435d95730d17d57bb # [osx]
-  - 92a493354c5fa66bea73b5fc014154af5d9f3f6cee8d20a826f4cd5d4b0e8a5e # [linux]
+  - 92a493354c5fa66bea73b5fc014154af5d9f3f6cee8d20a826f4cd5d4b0e8a5e
 
 CONDA_BUILD_SYSROOT:           # [osx]
   - /opt/MacOSX10.9.sdk        # [osx]
@@ -23,7 +20,7 @@ MACOSX_DEPLOYMENT_TARGET:      # [osx]
   - 10.9                       # [osx]
 
 mpi:
-  - moose_mpich
+  - moose-mpich
 
 moose_mpich:
   - 3.3.2
