@@ -1,5 +1,5 @@
 {% set name = "moose-dev" %}
-{% set version = "2020.01.27" %}
+{% set version = "2020.01.28" %}
 {% set sha256 = "60ccefaa5220e8b7608bc8fccdbf5a84fd9c50e6ca6c39ba5a121454a47313f8" %}
 
 package:
