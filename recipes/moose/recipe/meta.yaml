@@ -1,5 +1,5 @@
-{% set name = "moose-env" %}
-{% set version = "2020.01.28" %}
+{% set name = "moose" %}
+{% set version = "2020.01.30" %}
 {% set sha256 = "1f9e83570f0670511998f609a2b4b3ddd5dc02563b052b6cd3af24a59452cece" %}
 
 package:
@@ -23,14 +23,13 @@ requirements:
 
 test:
   commands:
-    - test -f $PREFIX/share/moose-env
+    - test -f $PREFIX/share/moose
 
 about:
   home: https://mooseframework.org/
   license: LGPL 2.1
-  summary: 'The Multiphysics Object-Oriented Simulation Environment (MOOSE) is a finite-element, multiphysics framework primarily developed by Idaho National Laboratory. This superficial module (moose-env) acts as a top-level module designed to provide all dependencies required in order to build and run MOOSE-based applications.'
+  summary: 'The Multiphysics Object-Oriented Simulation Environment (MOOSE) is a finite-element, multiphysics framework primarily developed by Idaho National Laboratory. This superficial module (moose) if a future placeholder for binary releases of MOOSE.'
 
 extra:
   recipe-maintainers:
     - milljm
-
