@@ -19,9 +19,9 @@ else
 fi
 
 # scrub debug-prefix-map args, which cause problems in pkg-config
-export CFLAGS=$(echo ${CFLAGS:-} | sed -E 's@\-fdebug\-prefix\-map[^ ]*@@g')
-export CXXFLAGS=$(echo ${CXXFLAGS:-} | sed -E 's@\-fdebug\-prefix\-map[^ ]*@@g')
-export FFLAGS=$(echo ${FFLAGS:-} | sed -E 's@\-fdebug\-prefix\-map[^ ]*@@g')
+export CFLAGS=$(echo ${CFLAGS:-} | sed -E 's@\-fdebug\-prefix\-map[^ ]*@@g' | sed -e 's/-O[1-3g]/-O3/g')
+export CXXFLAGS=$(echo ${CXXFLAGS:-} | sed -E 's@\-fdebug\-prefix\-map[^ ]*@@g' | sed -e 's/-O[1-3g]/-O3/g')
+export FFLAGS=$(echo ${FFLAGS:-} | sed -E 's@\-fdebug\-prefix\-map[^ ]*@@g' | sed -e 's/-O[1-3g]/-O3/g')
 
 if [[ $mpi == "openmpi" ]]; then
   export LIBS="-Wl,-rpath,$PREFIX/lib -lmpi_mpifh -lgfortran"

@@ -1,5 +1,6 @@
 #!/bin/bash
 set -eu
+
 if [[ $mpi == "openmpi" ]]; then
   export OMPI_MCA_plm=isolated
   export OMPI_MCA_rmaps_base_oversubscribe=yes
