@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 from contrib import dag
-import sys, os, re, argparse, subprocess
+import sys, os, re, argparse, subprocess, platform
 
 # Remove what has not been updated
 def getModified(args):
@@ -23,13 +23,29 @@ def buildDAG(args, modified_files, formula_dir):
 # Figure out what package depends on what other package
 def buildEdges(args, modified_files, formula_dir, dag_object):
     dependency_set = re.compile(r'-\s((?!\S*\.)\S*)')
+    skip_set = re.compile(r'^\s+skip:\s+(\w+).*\[(.*)\]', re.MULTILINE)
     recipe_dict = {}
     recipe_map = {}
+    skip_map = {}
     for node in dag_object.topological_sort():
         with open(os.path.join(node, 'meta.yaml'), 'r') as f:
             content = f.read()
+            logic = skip_set.findall(content)[0]
+            if 'not' in logic[1].lower():
+                if logic[0].lower() == 'true' and args.arch not in logic[1]:
+                    skip_map[node.split(os.path.sep)[1]] = node
+            else:
+                if logic[0].lower() == 'true' and args.arch in logic[1]:
+                    skip_map[node.split(os.path.sep)[1]] = node
+
         recipe_dict[node.split(os.path.sep)[1]] = set(dependency_set.findall(content))
         recipe_map[node.split(os.path.sep)[1]] = node
+
+    # Delete the recipes which will be skipped
+    for skip, v in skip_map.items():
+        modified_files.discard(v)
+        del recipe_dict[skip]
+        dag_object.delete_node_if_exists(recipe_map[skip])
 
     # Build edges (dependencies)
     for key, deps in recipe_dict.items():
@@ -63,14 +79,20 @@ def parseArguments(args=None):
     parser.add_argument('-r', '--reverse', action='store_const', const=True, default=False, help='Reverse dependency order')
     return verifyArgs(parser.parse_args(args))
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     args = parseArguments()
+    my_arch = re.findall(r'\w+', platform.platform())[0].lower()
+    if my_arch in ['darwin', 'macos']:
+        args.arch = 'osx'
+    else:
+        args.arch = my_arch
     modified_files = getModified(args)
     job_order = buildDAG(args, modified_files, 'recipes')
-    if args.reverse:
-        job_order = job_order.reverse_clone()
-    if args.dependencies:
-        print(' '.join(['recipes/' + x.split(os.path.sep)[1] for x in job_order.topological_sort()]))
-        sys.exit(0)
-    if modified_files:
-        print(' '.join(['recipes/' + x.split(os.path.sep)[1] for x in job_order.topological_sort()]))
+    if job_order.topological_sort():
+        if args.reverse:
+            job_order = job_order.reverse_clone()
+        if args.dependencies:
+            print(' '.join(['recipes/' + x.split(os.path.sep)[1] for x in job_order.topological_sort()]))
+            sys.exit(0)
+        if modified_files:
+            print(' '.join(['recipes/' + x.split(os.path.sep)[1] for x in job_order.topological_sort()]))
