@@ -3,32 +3,6 @@ set -eu
 export PETSC_DIR=$SRC_DIR
 export PETSC_ARCH=arch-conda-c-opt
 
-unset F90
-unset F77
-unset CC
-unset CXX
-if [[ $(uname) == Linux ]]; then
-    export LDFLAGS="-pthread -fopenmp $LDFLAGS"
-    export LDFLAGS="$LDFLAGS -Wl,-rpath-link,$PREFIX/lib"
-    # --as-needed appears to cause problems with fortran compiler detection
-    # due to missing libquadmath
-    # unclear why required libs are stripped but still linked
-    export FFLAGS="${FFLAGS:-} -Wl,--no-as-needed"
-else
-    export LDFLAGS="${LDFLAGS:-} -Wl,-headerpad_max_install_names"
-fi
-
-# scrub debug-prefix-map args, which cause problems in pkg-config
-export CFLAGS=$(echo ${CFLAGS:-} | sed -E 's@\-fdebug\-prefix\-map[^ ]*@@g' | sed -e 's/-O[1-3g]/-O3/g')
-export CXXFLAGS=$(echo ${CXXFLAGS:-} | sed -E 's@\-fdebug\-prefix\-map[^ ]*@@g' | sed -e 's/-O[1-3g]/-O3/g')
-export FFLAGS=$(echo ${FFLAGS:-} | sed -E 's@\-fdebug\-prefix\-map[^ ]*@@g' | sed -e 's/-O[1-3g]/-O3/g')
-
-if [[ $mpi == "openmpi" ]]; then
-  export LIBS="-Wl,-rpath,$PREFIX/lib -lmpi_mpifh -lgfortran"
-elif [[ $mpi == "moose-mpich" ]]; then
-  export LIBS="-lmpifort -lgfortran"
-fi
-
 if [[ $mpi == "openmpi" ]]; then
   export OMPI_MCA_plm=isolated
   export OMPI_MCA_rmaps_base_oversubscribe=yes
@@ -37,41 +11,49 @@ elif [[ $mpi == "moose-mpich" ]]; then
   export HYDRA_LAUNCHER=fork
 fi
 
+unset CFLAGS CPPFLAGS CXXFLAGS FFLAGS LIBS LDFLAGS
+if [[ $(uname) == Darwin ]]; then
+    export LDFLAGS="-Wl,-headerpad_max_install_names"
+fi
+
+# for MPI discovery
+export C_INCLUDE_PATH=$PREFIX/include
+export CPLUS_INCLUDE_PATH=$PREFIX/include
+export FPATH_INCLUDE_PATH=$PREFIX/include
+
 python ./configure \
-  AR="${AR:-ar}" \
+  AR="$AR" \
+  CPP="$CPP" \
   CC="mpicc" \
   CXX="mpicxx" \
   FC="mpifort" \
-  CFLAGS="$CFLAGS" \
-  CPPFLAGS="$CPPFLAGS" \
-  CXXFLAGS="$CXXFLAGS" \
-  FFLAGS="$FFLAGS" \
-  LDFLAGS="$LDFLAGS" \
-  LIBS="$LIBS" \
-  --with-x=0 \
-  --with-ssl=0 \
+  F90="mpifort" \
+  F77="mpifort" \
+  CFLAGS="-march=core2 -mtune=haswell" \
+  CXXFLAGS="-march=core2 -mtune=haswell" \
+  LIBS="-lmpifort -lgfortran" \
   --COPTFLAGS=-O3 \
   --CXXOPTFLAGS=-O3 \
   --FOPTFLAGS=-O3 \
-  --with-clib-autodetect=0 \
-  --with-cxxlib-autodetect=0 \
-  --with-fortranlib-autodetect=0 \
-  --with-blas-lib=libblas${SHLIB_EXT} \
-  --with-lapack-lib=liblapack${SHLIB_EXT} \
-  --with-mpi=1 \
-  --with-cxx-dialect=C++11 \
-  --with-fortran-bindings=0 \
   --with-debugging=0 \
+  --with-ssl=0 \
+  --with-pic=1 \
+  --with-mpi=1 \
+  --with-openmp=1 \
   --with-shared-libraries=1 \
+  --with-cxx-dialect=C++11 \
   --download-hypre=1 \
   --download-metis=1 \
   --download-ptscotch=1 \
   --download-parmetis=1 \
   --download-superlu_dist=1 \
-  --download-mumps=1 \
+  --download-fblaslapack=1 \
   --download-scalapack=1 \
-  --download-slepc \
-  --with-sowing=0 \
+  --download-mumps=1 \
+  --with-clib-autodetect=0 \
+  --with-cxxlib-autodetect=0 \
+  --with-fortranlib-autodetect=0 \
+  --download-slepc=1 \
   --prefix=$PREFIX || (cat configure.log && exit 1)
 
 # Verify that gcc_ext isn't linked
