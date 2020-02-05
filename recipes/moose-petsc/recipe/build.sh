@@ -22,8 +22,8 @@ export CPLUS_INCLUDE_PATH=$PREFIX/include
 export FPATH_INCLUDE_PATH=$PREFIX/include
 
 python ./configure \
-  AR="$AR" \
-  CPP="$CPP" \
+  AR="${AR:-}" \
+  CPP="${CPP:-}" \
   CC="mpicc" \
   CXX="mpicxx" \
   FC="mpifort" \
