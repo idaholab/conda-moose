@@ -8,13 +8,7 @@ if [[ $mpi == "openmpi" ]]; then
 elif [[ $mpi == "moose-mpich" ]]; then
   export HYDRA_LAUNCHER=fork
 fi
-
-# for MPI discovery
-export C_INCLUDE_PATH=$PREFIX/include
-export CPLUS_INCLUDE_PATH=$PREFIX/include
-export FPATH_INCLUDE_PATH=$PREFIX/include
 export CC=mpicc CXX=mpicxx
-
 mkdir -p build
 cd build
 VTK_PREFIX=${PREFIX}/libmesh-vtk
