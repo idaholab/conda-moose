@@ -18,7 +18,7 @@ fi
             --enable-debuginfo \
             --enable-two-level-namespace \
             CC=$CC CXX=$CXX FC=$FC F77=$FC F90='' \
-            CFLAGS='' CXXFLAGS='' FFLAGS='' LDFLAGS=${LDFLAGS:-} \
+            CFLAGS='' CXXFLAGS='' FFLAGS='' LDFLAGS="${LDFLAGS:-}" \
             FCFLAGS='' F90FLAGS='' F77FLAGS=''
 
 make -j"${CPU_COUNT:-1}"
