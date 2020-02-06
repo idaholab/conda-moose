@@ -19,7 +19,7 @@ mv metaphysicl src/github.com/libMesh/libmesh/contrib/
 mkdir -p src/github.com/libMesh/build
 cd src/github.com/libMesh/build
 
-unset LIBMESH_DIR CFLAGS CPPFLAGS CXXFLAGS FFLAGS LIBS LDFLAGS
+unset LIBMESH_DIR CFLAGS CPPFLAGS CXXFLAGS FFLAGS LIBS
 export F90=mpifort
 export F77=mpifort
 export FC=mpifort
@@ -37,7 +37,6 @@ elif [[ $mpi == "moose-mpich" ]]; then
 fi
 
 BUILD_CONFIG=`cat <<EOF
---prefix=${PREFIX}/libmesh \
 --enable-silent-rules \
 --enable-unique-id \
 --disable-warnings \
@@ -45,12 +44,13 @@ BUILD_CONFIG=`cat <<EOF
 --with-thread-model=openmp \
 --disable-maintainer-mode \
 --enable-petsc-hypre-required \
---enable-metaphysicl-required \
---with-vtk-lib=${BUILD_PREFIX}/libmesh-vtk/lib \
---with-vtk-include=${BUILD_PREFIX}/libmesh-vtk/include/vtk-${SHORT_VTK_NAME}
+--enable-metaphysicl-required
 EOF`
 
 ../libmesh/configure ${BUILD_CONFIG} \
+                     --prefix=${PREFIX}/libmesh \
+                     --with-vtk-lib=${BUILD_PREFIX}/libmesh-vtk/lib \
+                     --with-vtk-include=${BUILD_PREFIX}/libmesh-vtk/include/vtk-${SHORT_VTK_NAME} \
                      --with-methods="opt dbg devel"
 
 make -j $CPU_COUNT

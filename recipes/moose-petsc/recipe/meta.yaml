@@ -28,6 +28,9 @@ requirements:
   host:
     - cmake
     - moose-mpich
+    - libblas   # [osx]
+    - libcblas  # [osx]
+    - liblapack # [osx]
 
   run:
     - moose-mpich {{ moose_mpich }}

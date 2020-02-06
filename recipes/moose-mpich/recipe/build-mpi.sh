@@ -3,11 +3,9 @@
 export CC=$(basename "$CC")
 export CXX=$(basename "$CXX")
 export FC=$(basename "$FC")
-unset CPPFLAGS CFLAGS CXXFLAGS FFLAGS FCFLAGS LDFLAGS F90 F77
+unset CPPFLAGS CFLAGS CXXFLAGS FFLAGS FCFLAGS F90 F77
 if [[ $(uname) == Darwin ]]; then
     SHARED=clang
-    export LDFLAGS="-L$PREFIX/lib -Wl,-rpath,$PREFIX/lib"
-    export LIBRARY_PATH="$PREFIX/lib"
 else
     SHARED=gcc
 fi

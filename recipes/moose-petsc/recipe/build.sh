@@ -11,50 +11,58 @@ elif [[ $mpi == "moose-mpich" ]]; then
   export HYDRA_LAUNCHER=fork
 fi
 
-unset CFLAGS CPPFLAGS CXXFLAGS FFLAGS LIBS LDFLAGS
+unset CFLAGS CPPFLAGS CXXFLAGS FFLAGS LIBS
 if [[ $(uname) == Darwin ]]; then
-    export LDFLAGS="-Wl,-headerpad_max_install_names"
+    export LDFLAGS="${LDFLAGS:-} -Wl,-headerpad_max_install_names"
+    ADDITIONAL_ARGS="--with-blas-lib=libblas${SHLIB_EXT} --with-lapack-lib=liblapack${SHLIB_EXT}"
+else
+    ADDITIONAL_ARGS="--download-fblaslapack=1"
 fi
+
+OPTIMIZED_FLAGS="-march=core2 -mtune=haswell"
 
 # for MPI discovery
 export C_INCLUDE_PATH=$PREFIX/include
 export CPLUS_INCLUDE_PATH=$PREFIX/include
 export FPATH_INCLUDE_PATH=$PREFIX/include
 
-python ./configure \
-  AR="${AR:-}" \
-  CPP="${CPP:-}" \
-  CC="mpicc" \
-  CXX="mpicxx" \
-  FC="mpifort" \
-  F90="mpifort" \
-  F77="mpifort" \
-  CFLAGS="-march=core2 -mtune=haswell" \
-  CXXFLAGS="-march=core2 -mtune=haswell" \
-  LIBS="-lmpifort -lgfortran" \
+BUILD_CONFIG=`cat <<"EOF"
   --COPTFLAGS=-O3 \
   --CXXOPTFLAGS=-O3 \
   --FOPTFLAGS=-O3 \
-  --with-debugging=0 \
-  --with-ssl=0 \
-  --with-pic=1 \
+  --with-x=0 \
   --with-mpi=1 \
+  --with-ssl=0 \
   --with-openmp=1 \
-  --with-shared-libraries=1 \
-  --with-cxx-dialect=C++11 \
-  --download-hypre=1 \
-  --download-metis=1 \
-  --download-ptscotch=1 \
-  --download-parmetis=1 \
-  --download-superlu_dist=1 \
-  --download-fblaslapack=1 \
-  --download-scalapack=1 \
-  --download-mumps=1 \
+  --with-debugging=0 \
   --with-clib-autodetect=0 \
+  --with-cxx-dialect=C++11 \
+  --with-shared-libraries=1 \
   --with-cxxlib-autodetect=0 \
   --with-fortranlib-autodetect=0 \
+  --download-mumps=1 \
+  --download-hypre=1 \
+  --download-metis=1 \
   --download-slepc=1 \
-  --prefix=$PREFIX || (cat configure.log && exit 1)
+  --download-ptscotch=1 \
+  --download-parmetis=1 \
+  --download-scalapack=1 \
+  --download-superlu_dist=1
+EOF
+`
+
+python ./configure ${BUILD_CONFIG} ${ADDITIONAL_ARGS:-} \
+       AR="${AR:-ar}" \
+       CC="mpicc" \
+       CXX="mpicxx" \
+       FC="mpifort" \
+       F90="mpifort" \
+       F77="mpifort" \
+       CFLAGS="${OPTIMIZED_FLAGS}" \
+       CXXFLAGS="${OPTIMIZED_FLAGS}" \
+       LIBS="-lmpifort -lgfortran" \
+       LDFLAGS="${LDFLAGS:-}" \
+       --prefix=$PREFIX || (cat configure.log && exit 1)
 
 # Verify that gcc_ext isn't linked
 for f in $PETSC_ARCH/lib/petsc/conf/petscvariables $PETSC_ARCH/lib/pkgconfig/PETSc.pc; do
