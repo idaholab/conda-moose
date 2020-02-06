@@ -15,6 +15,7 @@ unset CFLAGS CPPFLAGS CXXFLAGS FFLAGS LIBS LDFLAGS
 export C_INCLUDE_PATH=$PREFIX/include
 export CPLUS_INCLUDE_PATH=$PREFIX/include
 export FPATH_INCLUDE_PATH=$PREFIX/include
+export LDFLAGS="-Wl,-rpath,${PREFIX}/lib -L${PREFIX}/lib"
 
 export CC=mpicc CXX=mpicxx
 export CFLAGS="-march=core2 -mtune=haswell"
