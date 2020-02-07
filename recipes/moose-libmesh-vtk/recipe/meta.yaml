@@ -1,5 +1,6 @@
 {% set vtk_version = vtk_version %}
 {% set friendly_version =  friendly_version %}
+{% set vtk_build = 1 %}
 {% set sha256 = sha256 %}
 
 package:
@@ -11,8 +12,8 @@ source:
   sha256: {{ sha256 }}
 
 build:
+  number: {{ vtk_build }}
   skip: true  # [win]
-  number: 0
 
 requirements:
   build:

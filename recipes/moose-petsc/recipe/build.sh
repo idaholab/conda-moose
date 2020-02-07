@@ -3,32 +3,6 @@ set -eu
 export PETSC_DIR=$SRC_DIR
 export PETSC_ARCH=arch-conda-c-opt
 
-unset F90
-unset F77
-unset CC
-unset CXX
-if [[ $(uname) == Linux ]]; then
-    export LDFLAGS="-pthread -fopenmp $LDFLAGS"
-    export LDFLAGS="$LDFLAGS -Wl,-rpath-link,$PREFIX/lib"
-    # --as-needed appears to cause problems with fortran compiler detection
-    # due to missing libquadmath
-    # unclear why required libs are stripped but still linked
-    export FFLAGS="${FFLAGS:-} -Wl,--no-as-needed"
-else
-    export LDFLAGS="${LDFLAGS:-} -Wl,-headerpad_max_install_names"
-fi
-
-# scrub debug-prefix-map args, which cause problems in pkg-config
-export CFLAGS=$(echo ${CFLAGS:-} | sed -E 's@\-fdebug\-prefix\-map[^ ]*@@g' | sed -e 's/-O[1-3g]/-O3/g')
-export CXXFLAGS=$(echo ${CXXFLAGS:-} | sed -E 's@\-fdebug\-prefix\-map[^ ]*@@g' | sed -e 's/-O[1-3g]/-O3/g')
-export FFLAGS=$(echo ${FFLAGS:-} | sed -E 's@\-fdebug\-prefix\-map[^ ]*@@g' | sed -e 's/-O[1-3g]/-O3/g')
-
-if [[ $mpi == "openmpi" ]]; then
-  export LIBS="-Wl,-rpath,$PREFIX/lib -lmpi_mpifh -lgfortran"
-elif [[ $mpi == "moose-mpich" ]]; then
-  export LIBS="-lmpifort -lgfortran"
-fi
-
 if [[ $mpi == "openmpi" ]]; then
   export OMPI_MCA_plm=isolated
   export OMPI_MCA_rmaps_base_oversubscribe=yes
@@ -37,42 +11,58 @@ elif [[ $mpi == "moose-mpich" ]]; then
   export HYDRA_LAUNCHER=fork
 fi
 
-python ./configure \
-  AR="${AR:-ar}" \
-  CC="mpicc" \
-  CXX="mpicxx" \
-  FC="mpifort" \
-  CFLAGS="$CFLAGS" \
-  CPPFLAGS="$CPPFLAGS" \
-  CXXFLAGS="$CXXFLAGS" \
-  FFLAGS="$FFLAGS" \
-  LDFLAGS="$LDFLAGS" \
-  LIBS="$LIBS" \
-  --with-x=0 \
-  --with-ssl=0 \
+unset CFLAGS CPPFLAGS CXXFLAGS FFLAGS LIBS
+if [[ $(uname) == Darwin ]]; then
+    export LDFLAGS="${LDFLAGS:-} -Wl,-headerpad_max_install_names"
+    ADDITIONAL_ARGS="--with-blas-lib=libblas${SHLIB_EXT} --with-lapack-lib=liblapack${SHLIB_EXT}"
+else
+    ADDITIONAL_ARGS="--download-fblaslapack=1"
+fi
+
+OPTIMIZED_FLAGS="-march=core2 -mtune=haswell"
+
+# for MPI discovery
+export C_INCLUDE_PATH=$PREFIX/include
+export CPLUS_INCLUDE_PATH=$PREFIX/include
+export FPATH_INCLUDE_PATH=$PREFIX/include
+
+BUILD_CONFIG=`cat <<"EOF"
   --COPTFLAGS=-O3 \
   --CXXOPTFLAGS=-O3 \
   --FOPTFLAGS=-O3 \
+  --with-x=0 \
+  --with-mpi=1 \
+  --with-ssl=0 \
+  --with-openmp=1 \
+  --with-debugging=0 \
   --with-clib-autodetect=0 \
+  --with-cxx-dialect=C++11 \
+  --with-shared-libraries=1 \
   --with-cxxlib-autodetect=0 \
   --with-fortranlib-autodetect=0 \
-  --with-blas-lib=libblas${SHLIB_EXT} \
-  --with-lapack-lib=liblapack${SHLIB_EXT} \
-  --with-mpi=1 \
-  --with-cxx-dialect=C++11 \
-  --with-fortran-bindings=0 \
-  --with-debugging=0 \
-  --with-shared-libraries=1 \
+  --download-mumps=1 \
   --download-hypre=1 \
   --download-metis=1 \
+  --download-slepc=1 \
   --download-ptscotch=1 \
   --download-parmetis=1 \
-  --download-superlu_dist=1 \
-  --download-mumps=1 \
   --download-scalapack=1 \
-  --download-slepc \
-  --with-sowing=0 \
-  --prefix=$PREFIX || (cat configure.log && exit 1)
+  --download-superlu_dist=1
+EOF
+`
+
+python ./configure ${BUILD_CONFIG} ${ADDITIONAL_ARGS:-} \
+       AR="${AR:-ar}" \
+       CC="mpicc" \
+       CXX="mpicxx" \
+       FC="mpifort" \
+       F90="mpifort" \
+       F77="mpifort" \
+       CFLAGS="${OPTIMIZED_FLAGS}" \
+       CXXFLAGS="${OPTIMIZED_FLAGS}" \
+       LIBS="-lmpifort -lgfortran" \
+       LDFLAGS="${LDFLAGS:-}" \
+       --prefix=$PREFIX || (cat configure.log && exit 1)
 
 # Verify that gcc_ext isn't linked
 for f in $PETSC_ARCH/lib/petsc/conf/petscvariables $PETSC_ARCH/lib/pkgconfig/PETSc.pc; do
