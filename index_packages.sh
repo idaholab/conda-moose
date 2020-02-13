@@ -20,7 +20,14 @@ function print_and_run()
   print_cmd $*
   "$@"
 }
-printf "Executing indexing command on mooseframework.org..."
-ssh -oStrictHostKeyChecking=no -q mooseframework.org "source /etc/profile; /var/moose/conda/index_channels.sh"
-exitIfReturnCode $?
+
+if beginswith "Pull" "$CIVET_EVENT_CAUSE"; then
+  printf "Executing indexing command on hpcsc..."
+  ssh -oStrictHostKeyChecking=no -q hpcsc.hpc.inl.gov "source /etc/profile; /data/ssl/conda_packages/index_channels.sh"
+  exitIfReturnCode $?
+else
+  printf "Executing indexing command on mooseframework.org..."
+  ssh -oStrictHostKeyChecking=no -q mooseframework.org "source /etc/profile; /var/moose/conda/index_channels.sh"
+  exitIfReturnCode $?
+fi
 exit 0

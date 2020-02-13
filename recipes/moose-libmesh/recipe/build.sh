@@ -16,6 +16,8 @@ function sed_replace(){
 }
 
 mv metaphysicl src/github.com/libMesh/libmesh/contrib/
+mv timpi src/github.com/libMesh/libmesh/contrib/
+
 mkdir -p src/github.com/libMesh/build
 cd src/github.com/libMesh/build
 
@@ -66,4 +68,3 @@ cat <<EOF > "${PREFIX}/etc/conda/deactivate.d/deactivate_${PKG_NAME}.sh"
 unset LIBMESH_DIR
 unset MOOSE_NO_CODESIGN
 EOF
-
