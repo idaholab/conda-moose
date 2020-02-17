@@ -21,6 +21,15 @@ function print_and_run()
   "$@"
 }
 
+function beginswith()
+{
+  case $2 in "$1"*)
+    true;;
+  *)
+    false;;
+  esac
+}
+
 ##### Sanity checks #####
 if ! conda build --help > /dev/null 2>&1; then
     printf "conda build not available\n"
@@ -44,8 +53,6 @@ fi
 
 # Get a topological sort of formulas we need to build
 FORMULAS=`./get_formulas.py`
-exitIfReturnCode $?
-NECESSARY=`./get_formulas.py -d`
 exitIfReturnCode $?
 if [ -z "${FORMULAS}" ]; then
     printf "Nothing to build\n"
