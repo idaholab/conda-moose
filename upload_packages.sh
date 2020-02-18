@@ -69,16 +69,14 @@ export BZ2DIR="${CONDA_PREFIX}/conda-bld/${ARCH}"
 
 # PR's -copy binaries to HPCSC
 if beginswith "Pull" "$CIVET_EVENT_CAUSE"; then
-    printf "Uploading to HPC for further testing..."
-    # Create directory if not already created
-    ssh -q hpcsc.hpc.inl.gov mkdir -p /data/ssl/conda_packages/moose/${ARCH}
+    printf "Uploading to HPC for further testing...\n"
+    ssh -oStrictHostKeyChecking=no -q hpcsc.hpc.inl.gov mkdir -p /data/ssl/conda_packages/moose/${ARCH}
     print_and_run rsync -raz "$BZ2DIR" hpcsc.hpc.inl.gov:/data/ssl/conda_packages/moose/
     exitIfReturnCode $?
 
 # Merges to devel -copy binaries to MOOSEFRAMEWORK.ORG
 else
-    printf "Uploading to mooseframework.org..."
-
+    printf "Uploading to mooseframework.org...\n"
     # Darwin machines (firewall rules prevent direct access to mooseframework.org)
     if [ "$ARCH" = 'osx-64' ]; then
         # Clean the hand off directory
@@ -91,7 +89,7 @@ else
 
     # Rod (a linux machine with direct access to mooseframework.org)
     else
-        ssh -q mooseframework.org mkdir -p /var/moose/conda/moose/${ARCH}
+        ssh -oStrictHostKeyChecking=no -q mooseframework.org mkdir -p /var/moose/conda/moose/${ARCH}
         rsync -raz "$BZ2DIR" mooseframework.org:/var/moose/conda/moose/
         exitIfReturnCode $?
     fi
