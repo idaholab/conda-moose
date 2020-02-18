@@ -43,6 +43,7 @@ requirements:
     - moose-petsc {{ moose_petsc }}
 
   run:
+    - pkg-config
     - moose-libmesh-vtk
     - moose-petsc
 
