@@ -9,7 +9,7 @@ if [[ $(uname) == Darwin ]]; then
 else
     SHARED=gcc
 fi
-TUNING="-march=core2 -mtune=haswell"
+TUNING="-march=nocona -mtune=haswell"
 ./configure --prefix=$PREFIX \
             --enable-shared \
             --enable-sharedlibs=$SHARED \
@@ -17,8 +17,8 @@ TUNING="-march=core2 -mtune=haswell"
             --enable-debuginfo \
             --enable-two-level-namespace \
             CC=$CC CXX=$CXX FC=$FC F77=$FC F90='' \
-            CFLAGS="$TUNNING" CXXFLAGS="$TUNNING" FFLAGS="$TUNNING" LDFLAGS="${LDFLAGS:-}" \
-            FCFLAGS="$TUNNING" F90FLAGS='' F77FLAGS=''
+            CFLAGS="${TUNING}" CXXFLAGS="${TUNING}" FFLAGS="${TUNING}" LDFLAGS="${LDFLAGS:-}" \
+            FCFLAGS="${TUNING}" F90FLAGS='' F77FLAGS=''
 
 make -j"${CPU_COUNT:-1}"
 make install

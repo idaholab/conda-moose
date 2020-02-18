@@ -22,13 +22,14 @@ mkdir -p src/github.com/libMesh/build
 cd src/github.com/libMesh/build
 
 unset LIBMESH_DIR CFLAGS CPPFLAGS CXXFLAGS FFLAGS LIBS
+TUNING="-march=nocona -mtune=haswell"
 export F90=mpifort
 export F77=mpifort
 export FC=mpifort
 export CC=mpicc
 export CXX=mpicxx
-export CFLAGS="-march=core2 -mtune=haswell"
-export CXXFLAGS="-march=core2 -mtune=haswell"
+export CFLAGS="${TUNING}"
+export CXXFLAGS="${TUNING}"
 
 if [[ $mpi == "openmpi" ]]; then
   export OMPI_MCA_plm=isolated

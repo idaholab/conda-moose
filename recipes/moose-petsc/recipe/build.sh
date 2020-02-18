@@ -19,7 +19,7 @@ else
     ADDITIONAL_ARGS="--download-fblaslapack=1"
 fi
 
-OPTIMIZED_FLAGS="-march=core2 -mtune=haswell"
+TUNING="-march=nocona -mtune=haswell"
 
 # for MPI discovery
 export C_INCLUDE_PATH=$PREFIX/include
@@ -58,8 +58,8 @@ python ./configure ${BUILD_CONFIG} ${ADDITIONAL_ARGS:-} \
        FC="mpifort" \
        F90="mpifort" \
        F77="mpifort" \
-       CFLAGS="${OPTIMIZED_FLAGS}" \
-       CXXFLAGS="${OPTIMIZED_FLAGS}" \
+       CFLAGS="${TUNING}" \
+       CXXFLAGS="${TUNING}" \
        LIBS="-lmpifort -lgfortran" \
        LDFLAGS="${LDFLAGS:-}" \
        --prefix=$PREFIX || (cat configure.log && exit 1)

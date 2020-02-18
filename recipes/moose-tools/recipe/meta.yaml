@@ -32,6 +32,7 @@ requirements:
     - vtk
     - pylatexenc
     - jinja2
+    - mako
     - python
 
 test:
