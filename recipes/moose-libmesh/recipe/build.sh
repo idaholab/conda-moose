@@ -2,6 +2,7 @@
 set -eu
 export PKG_CONFIG_PATH=$BUILD_PREFIX/lib/pkgconfig:$PKG_CONFIG_PATH
 export PETSC_DIR=`pkg-config PETSc --variable=prefix`
+
 if [ -z $PETSC_DIR ]; then
     printf "PETSC not found.\n"
     exit 1
@@ -16,8 +17,16 @@ function sed_replace(){
 }
 
 mv metaphysicl src/github.com/libMesh/libmesh/contrib/
+mv timpi src/github.com/libMesh/libmesh/contrib/
+
 mkdir -p src/github.com/libMesh/build
 cd src/github.com/libMesh/build
+
+if [[ $(uname) == Darwin ]]; then
+    TUNING="-march=core2 -mtune=haswell"
+else
+    TUNING="-march=nocona -mtune=haswell"
+fi
 
 unset LIBMESH_DIR CFLAGS CPPFLAGS CXXFLAGS FFLAGS LIBS
 export F90=mpifort
@@ -25,8 +34,8 @@ export F77=mpifort
 export FC=mpifort
 export CC=mpicc
 export CXX=mpicxx
-export CFLAGS="-march=core2 -mtune=haswell"
-export CXXFLAGS="-march=core2 -mtune=haswell"
+export CFLAGS="${TUNING}"
+export CXXFLAGS="${TUNING}"
 
 if [[ $mpi == "openmpi" ]]; then
   export OMPI_MCA_plm=isolated
@@ -66,4 +75,3 @@ cat <<EOF > "${PREFIX}/etc/conda/deactivate.d/deactivate_${PKG_NAME}.sh"
 unset LIBMESH_DIR
 unset MOOSE_NO_CODESIGN
 EOF
-

@@ -21,6 +21,15 @@ function print_and_run()
   "$@"
 }
 
+function beginswith()
+{
+  case $2 in "$1"*)
+    true;;
+  *)
+    false;;
+  esac
+}
+
 ##### Sanity checks #####
 if ! conda build --help > /dev/null 2>&1; then
     printf "conda build not available\n"
@@ -45,12 +54,9 @@ fi
 # Get a topological sort of formulas we need to build
 FORMULAS=`./get_formulas.py`
 exitIfReturnCode $?
-NECESSARY=`./get_formulas.py -d`
-exitIfReturnCode $?
 if [ -z "${FORMULAS}" ]; then
     printf "Nothing to build\n"
-    # Exit with 0 so we continue to allow this PR to enter the Devel branch (changes to something other
-    # than formulas detected)
+    # Exit with 0 so we continue to allow this PR to run (something other than recipes has changed)
     exit 0
 fi
 
@@ -61,36 +67,31 @@ else
 fi
 export BZ2DIR="${CONDA_PREFIX}/conda-bld/${ARCH}"
 
-# DARWIN ONLY: Delete any stale packages residing in rod:/raid/CONDA_MOOSE
-if [ "$ARCH" = 'osx-64' ]; then
-    ssh -oStrictHostKeyChecking=no -q rod.inl.gov "rm -rf /raid/CONDA_MOOSE/*.bz2"
+# PR's -copy binaries to HPCSC
+if beginswith "Pull" "$CIVET_EVENT_CAUSE"; then
+    printf "Uploading to HPC for further testing...\n"
+    ssh -oStrictHostKeyChecking=no -q hpcsc.hpc.inl.gov mkdir -p /data/ssl/conda_packages/moose/${ARCH}
+    print_and_run rsync -raz "$BZ2DIR" hpcsc.hpc.inl.gov:/data/ssl/conda_packages/moose/
     exitIfReturnCode $?
-fi
 
-for formula in ${FORMULAS}; do
-    bz_file=$(basename $formula)
-    printf "Uploading ${bz_file}...\n"
-    # DARWIN ONLY (firewall rules prevent pb-catalina from access mooseframework.org)
+# Merges to devel -copy binaries to MOOSEFRAMEWORK.ORG
+else
+    printf "Uploading to mooseframework.org...\n"
+    # Darwin machines (firewall rules prevent direct access to mooseframework.org)
     if [ "$ARCH" = 'osx-64' ]; then
-        # print what should be happening for Darwin machines, instead of printing all these 'scp to rod first' stuff
-        print_cmd "scp ${BZ2DIR}/${bz_file}"*.bz2 mooseframework.org:/var/moose/conda/moose/${ARCH}/
-
-        scp -q "${BZ2DIR}/${bz_file}"*.bz2 rod.inl.gov:/raid/CONDA_MOOSE/
+        # Clean the hand off directory
+        ssh -oStrictHostKeyChecking=no -q rod.inl.gov "rm -rf /raid/CONDA_MOOSE/${ARCH}"
         exitIfReturnCode $?
-        ssh -oStrictHostKeyChecking=no -q rod.inl.gov "ssh -q mooseframework.org mkdir -p /var/moose/conda/moose/${ARCH}; scp -q /raid/CONDA_MOOSE/${bz_file}"*.bz2 mooseframework.org:/var/moose/conda/moose/${ARCH}/
+        rsync -raz "$BZ2DIR" rod.inl.gov:/raid/CONDA_MOOSE/
+        exitIfReturnCode $?
+        ssh -oStrictHostKeyChecking=no -q rod.inl.gov "ssh -q mooseframework.org mkdir -p /var/moose/conda/moose/${ARCH}; rsync -raz /raid/CONDA_MOOSE/${ARCH} mooseframework.org:/var/moose/conda/moose/"
         exitIfReturnCode $?
 
-    # We are on rod.inl.gov
+    # Rod (a linux machine with direct access to mooseframework.org)
     else
-        ssh -q mooseframework.org mkdir -p /var/moose/conda/moose/${ARCH}
-        print_and_run scp "${BZ2DIR}/${bz_file}"*.bz2 mooseframework.org:/var/moose/conda/moose/${ARCH}/
+        ssh -oStrictHostKeyChecking=no -q mooseframework.org mkdir -p /var/moose/conda/moose/${ARCH}
+        rsync -raz "$BZ2DIR" mooseframework.org:/var/moose/conda/moose/
         exitIfReturnCode $?
     fi
-done
-
-# DARWIN ONLY:  Delete Darwin packages from rod, now that we are finished.
-if [ "$ARCH" = 'osx-64' ]; then
-    ssh -oStrictHostKeyChecking=no -q rod.inl.gov "rm -rf /raid/CONDA_MOOSE/*.bz2"
-    exitIfReturnCode $?
 fi
 exit 0
