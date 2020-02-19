@@ -2,6 +2,7 @@
 set -eu
 export PKG_CONFIG_PATH=$BUILD_PREFIX/lib/pkgconfig:$PKG_CONFIG_PATH
 export PETSC_DIR=`pkg-config PETSc --variable=prefix`
+
 if [ -z $PETSC_DIR ]; then
     printf "PETSC not found.\n"
     exit 1
