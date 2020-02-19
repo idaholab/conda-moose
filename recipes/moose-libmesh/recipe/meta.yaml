@@ -1,8 +1,12 @@
 {% set name = "moose-libmesh" %}
-{% set version = "81589c1acb86765a0a1981b7fef5328e91fb92ab" %}
-{% set friendly_version = "2020.02.05" %}
+{% set version = "3b8296b3b7c2b526d0be242fa6208750c0ede69b" %}
+{% set sha256 = "2c77e16a854e02d26a579fc59d1f90ee35c790a6569ace3bbc59d063cbcdae3b" %}
+{% set friendly_version = "2020.02.17" %}
 {% set libmesh_build = 0 %}
-{% set sha256 = "8f37b5d52ad764f8da5594a7b608fd8df6836038c0c187046861307cca0345bf" %}
+
+{% set timpi_version = "255c92a47d73137a2d81ce72c54ae7db5b68e416" %}
+{% set timpi_sha256 = "8e257d4b06b3a2e27b77bb82d26c2cb4f13c2123f8625e2e4d8289e35ca4b608" %}
+
 {% set metaphysicl_version = "78f338a1508b4010a39a34d9fec9ee6247afaecf" %}
 {% set metaphysicl_sha256 = "30ead616f1aad634ce270db2688f8c2b799a1f3b6a2f726a3bbf5abe1f923ac7" %}
 
@@ -15,6 +19,12 @@ source:
     fn: libmesh-{{ version }}.tar.gz
     folder: src/github.com/libMesh/libmesh
     sha256: {{ sha256 }}
+
+  - url: https://github.com/libMesh/TIMPI/archive/{{ timpi_version }}.tar.gz
+    fn: timp-{{ timpi_version }}.tar.gz
+    folder: timpi
+    sha256: {{ timpi_sha256 }}
+
   - url: https://github.com/roystgnr/MetaPhysicL/archive/{{ metaphysicl_version }}.tar.gz
     fn: metaphysicl-{{ metaphysicl_version }}.tar.gz
     folder: metaphysicl
@@ -33,6 +43,7 @@ requirements:
     - moose-petsc {{ moose_petsc }}
 
   run:
+    - pkg-config
     - moose-libmesh-vtk
     - moose-petsc
 

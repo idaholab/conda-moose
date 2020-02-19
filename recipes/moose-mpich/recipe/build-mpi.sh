@@ -6,9 +6,12 @@ export FC=$(basename "$FC")
 unset CPPFLAGS CFLAGS CXXFLAGS FFLAGS FCFLAGS F90 F77
 if [[ $(uname) == Darwin ]]; then
     SHARED=clang
+    TUNING="-march=core2 -mtune=haswell"
 else
     SHARED=gcc
+    TUNING="-march=nocona -mtune=haswell"
 fi
+
 ./configure --prefix=$PREFIX \
             --enable-shared \
             --enable-sharedlibs=$SHARED \
@@ -16,8 +19,8 @@ fi
             --enable-debuginfo \
             --enable-two-level-namespace \
             CC=$CC CXX=$CXX FC=$FC F77=$FC F90='' \
-            CFLAGS='' CXXFLAGS='' FFLAGS='' LDFLAGS="${LDFLAGS:-}" \
-            FCFLAGS='' F90FLAGS='' F77FLAGS=''
+            CFLAGS="${TUNING}" CXXFLAGS="${TUNING}" FFLAGS="${TUNING}" LDFLAGS="${LDFLAGS:-}" \
+            FCFLAGS="${TUNING}" F90FLAGS='' F77FLAGS=''
 
 make -j"${CPU_COUNT:-1}"
 make install
