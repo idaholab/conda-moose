@@ -21,8 +21,13 @@ mv timpi src/github.com/libMesh/libmesh/contrib/
 mkdir -p src/github.com/libMesh/build
 cd src/github.com/libMesh/build
 
+if [[ $(uname) == Darwin ]]; then
+    TUNING="-march=core2 -mtune=haswell"
+else
+    TUNING="-march=nocona -mtune=haswell"
+fi
+
 unset LIBMESH_DIR CFLAGS CPPFLAGS CXXFLAGS FFLAGS LIBS
-TUNING="-march=nocona -mtune=haswell"
 export F90=mpifort
 export F77=mpifort
 export FC=mpifort

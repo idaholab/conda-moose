@@ -19,7 +19,11 @@ else
     ADDITIONAL_ARGS="--download-fblaslapack=1"
 fi
 
-TUNING="-march=nocona -mtune=haswell"
+if [[ $(uname) == Darwin ]]; then
+    TUNING="-march=core2 -mtune=haswell"
+else
+    TUNING="-march=nocona -mtune=haswell"
+fi
 
 # for MPI discovery
 export C_INCLUDE_PATH=$PREFIX/include

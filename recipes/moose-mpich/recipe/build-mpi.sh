@@ -6,10 +6,12 @@ export FC=$(basename "$FC")
 unset CPPFLAGS CFLAGS CXXFLAGS FFLAGS FCFLAGS F90 F77
 if [[ $(uname) == Darwin ]]; then
     SHARED=clang
+    TUNING="-march=core2 -mtune=haswell"
 else
     SHARED=gcc
+    TUNING="-march=nocona -mtune=haswell"
 fi
-TUNING="-march=nocona -mtune=haswell"
+
 ./configure --prefix=$PREFIX \
             --enable-shared \
             --enable-sharedlibs=$SHARED \
