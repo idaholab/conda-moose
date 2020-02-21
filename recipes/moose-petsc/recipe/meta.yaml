@@ -1,6 +1,6 @@
 {% set version = "3.11.4" %}
 {% set sha256 = "319cb5a875a692a67fe5b1b90009ba8f182e21921ae645d38106544aff20c3c1" %}
-{% set petsc_build = 2 %}
+{% set petsc_build = 3 %}
 
 package:
   name: moose-petsc
@@ -34,6 +34,9 @@ requirements:
 
   run:
     - moose-mpich {{ moose_mpich }}
+    - libblas   # [osx]
+    - libcblas  # [osx]
+    - liblapack # [osx]
 
 test:
   requires:
