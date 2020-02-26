@@ -9,3 +9,7 @@ macos_machine:                 # [osx]
 
 MACOSX_DEPLOYMENT_TARGET:      # [osx]
   - 10.9                       # [osx]
+
+libpng:
+  - 1.6.37 h2573ce8_0 # [osx]
+  - 1.6.37 hed695b0_0 # [linux]

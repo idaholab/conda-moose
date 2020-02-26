@@ -38,9 +38,9 @@ if [ -z "$CONDA_PREFIX" ]; then
 fi
 
 # Get a topological sort of formulas we need to build
-FORMULAS=`./get_formulas.py`
+FORMULAS=`./get_formulas.py 2>/dev/null`
 exitIfReturnCode $?
-NECESSARY=`./get_formulas.py -d`
+NECESSARY=`./get_formulas.py -d 2>/dev/null`
 exitIfReturnCode $?
 if [ -z "${FORMULAS}" ]; then
     printf "Nothing to build\n"
@@ -57,8 +57,8 @@ if [ "$(echo ${FORMULAS} | wc -w)" != "$(echo ${NECESSARY} | wc -w)" ]; then
     printf "Warning:
 \tNot all recipes necessary in the dependency chain are going to
 \tbe built! This may be fine if intentionally preventing something
-\tfrom reaching certain users (like a libMesh update to moose-env
-\tusers).\n\nBuilding only:\n"
+\tfrom reaching certain users (like a libMesh update to the moose
+\tmeta package).\n\nBuilding only:\n"
 
     for formula in ${FORMULAS}; do
         printf "\t$(basename $formula)\n"

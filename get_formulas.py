@@ -1,73 +1,57 @@
 #!/usr/bin/env python
 from contrib import dag
 import sys, os, re, argparse, subprocess, platform
+from conda_build.metadata import MetaData
 
-# Remove what has not been updated
 def getModified(args):
+    """
+    return a path to meta.yaml for anything in that recipe directory as being modified.
+    """
     git_process = subprocess.Popen(['git', 'diff', '--name-only', 'master'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     file_list = git_process.communicate()[0].decode('utf-8').split()
     formula_files = set([])
     for f_file in file_list:
         if f_file.split(os.path.sep)[0] == 'recipes' and os.path.exists(f_file):
-            formula_files.add(os.path.join(*f_file.split(os.path.sep)[:2], 'recipe'))
+            formula_files.add(os.path.join(*f_file.split(os.path.sep)[:2], 'recipe', 'meta.yaml'))
     return formula_files
 
-# Search for and add a node for every formula found in formula_dir that works with bottles
 def buildDAG(args, modified_files, formula_dir):
-    formula_dag = dag.DAG()
+    oDag = dag.DAG()
+    dMap = {}
+    common_names = set([])
     for directory, d_list, f_list in os.walk(formula_dir):
         if 'meta.yaml' in f_list:
-            formula_dag.add_node(os.path.join(directory))
-    return buildEdges(args, modified_files, formula_dir, formula_dag)
+            meta = MetaData(os.path.join(directory, 'meta.yaml'))
+            reqs = meta.meta['requirements']
+            combined_deps = set(reqs.get('build', '')).union(reqs.get('run', ''))
+            common_names.add(meta.name())
+            dMap[meta.meta_path] = (meta.name(), combined_deps, meta)
 
-# Figure out what package depends on what other package
-def buildEdges(args, modified_files, formula_dir, dag_object):
-    dependency_set = re.compile(r'-\s((?!\S*\.)\S*)')
-    skip_set = re.compile(r'^\s+skip:\s+(\w+).*\[(.*)\]', re.MULTILINE)
-    recipe_dict = {}
-    recipe_map = {}
-    skip_map = {}
-    for node in dag_object.topological_sort():
-        with open(os.path.join(node, 'meta.yaml'), 'r') as f:
-            content = f.read()
-            logic = skip_set.findall(content)[0]
-            if 'not' in logic[1].lower():
-                if logic[0].lower() == 'true' and args.arch not in logic[1]:
-                    skip_map[node.split(os.path.sep)[1]] = node
-            else:
-                if logic[0].lower() == 'true' and args.arch in logic[1]:
-                    skip_map[node.split(os.path.sep)[1]] = node
+    # Populate DAG
+    [oDag.add_node(x) for x in dMap.keys()]
 
-        recipe_dict[node.split(os.path.sep)[1]] = set(dependency_set.findall(content))
-        recipe_map[node.split(os.path.sep)[1]] = node
+    # Create edges
+    for ind_node, name, dependencies, meta, dag_node in _walkMapAndDag(dMap, oDag):
+        controlled_dependencies = set(dependencies).intersection(common_names)
+        if dMap[dag_node][0] in controlled_dependencies:
+            oDag.add_edge(dag_node, ind_node)
 
-    # Delete the recipes which will be skipped
-    for skip, v in skip_map.items():
-        modified_files.discard(v)
-        del recipe_dict[skip]
-        dag_object.delete_node_if_exists(recipe_map[skip])
+    # Remove edges (skips, unmodified recipes, etc)
+    for ind_node, name, dependencies, meta, dag_node in _walkMapAndDag(dMap, oDag):
+        controlled_dependencies = set(dependencies).intersection(common_names)
+        if ind_node not in modified_files and controlled_dependencies and args.dependencies:
+            continue
+        elif ind_node not in modified_files:
+            oDag.delete_node_if_exists(ind_node)
 
-    # Build edges (dependencies)
-    for key, deps in recipe_dict.items():
-        for dep in deps:
-            if dep in recipe_dict.keys():
-                dag_object.add_edge(recipe_map[dep], recipe_map[key])
+    return oDag
 
-    # Populate build_set with recipes that have changed in the repository
-    build_set = set([])
-    for modified_file in modified_files:
-        build_set.add(modified_file)
-        # Add recipes this recipe depends on, if requested (--dependencies)
-        if args.dependencies:
-            build_set = build_set.union(set(dag_object.all_downstreams(modified_file)))
-
-    # Remove any recipes not in build_set
-    cloned = dag_object.clone()
-    for node in cloned.topological_sort():
-        if node not in build_set:
-            dag_object.delete_node(node)
-
-    return dag_object
+def _walkMapAndDag(dict, dag):
+    cloned = dag.clone()
+    for key, values in dict.items():
+        (common_name, dependencies, meta) = values
+        for node in cloned.topological_sort():
+            yield (key, common_name, dependencies, meta, node)
 
 def verifyArgs(args):
     return args

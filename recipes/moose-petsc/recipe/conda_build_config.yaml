@@ -16,5 +16,17 @@ mpi:
 moose_mpich:
   - 3.3.2
 
+libblas:
+  - 3.8.0 15_openblas # [osx]
+
+libcblas:
+  - 3.8.0 15_openblas # [osx]
+
+liblapack:
+  - 3.8.0 15_openblas # [osx]
+
 pin_run_as_build:
   moose_mpich: x.x.x
+  libblas: x.x.x
+  libcblas: x.x.x
+  liblapack: x.x.x

@@ -1,8 +1,8 @@
 {% set version = "3.3.2" %}
-{% set mpich_build = 2 %}
+{% set mpich_build = 3 %}
 
 package:
-  name: mpich-mpi
+  name: moose-mpich
   version: {{ version }}
 
 source:
@@ -13,32 +13,24 @@ source:
 build:
   number: {{ mpich_build }}
   skip: True  # [win]
+  run_exports:
+    - {{ pin_subpackage('moose-mpich', max_pin='x.x') }}
 
 requirements:
+  build:
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
+    - {{ compiler('fortran') }}
+    - make  # [unix]
+  host: []
   run:
     - moose-compilers {{ moose_compilers }}
-
-outputs:
-  - name: moose-mpich
-    script: build-mpi.sh
-    build:
-      run_exports:
-        - {{ pin_subpackage('moose-mpich', max_pin='x.x') }}
-    requirements:
-      build:
-        - {{ compiler('c') }}
-        - {{ compiler('cxx') }}
-        - {{ compiler('fortran') }}
-        - make  # [unix]
-      host: []
-      run:
-        - moose-compilers {{ moose_compilers }}
-        - mpi 1.0 mpich
-    test:
-      script: run_test.sh
-      files:
-        - mpiexec.sh
-        - tests/helloworld.sh
+    - mpi 1.0 mpich
+test:
+  script: run_test.sh
+  files:
+    - mpiexec.sh
+    - tests/helloworld.sh
 
 about:
   home: http://www.mpich.org/
