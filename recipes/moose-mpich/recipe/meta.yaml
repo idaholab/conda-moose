@@ -18,9 +18,17 @@ build:
 
 requirements:
   build:
-    - {{ compiler('c') }}
-    - {{ compiler('cxx') }}
-    - {{ compiler('fortran') }}
+    - gcc_linux-64 {{ gcc }}           # [linux]
+    - gxx_linux-64 {{ gxx }}           # [linux]
+    - gfortran_linux-64 {{ fortran }}  # [linux]
+    - gcc_impl_linux-64 {{ gccimpl }}  # [linux]
+    - clang {{ clang }}                # [osx]
+    - clang_osx-64 {{ clangosx }}      # [osx]
+    - clangxx {{ clangxx }}            # [osx]
+    - compiler-rt {{ compilerrt }}     # [osx]
+    - libllvm9 {{ libllvm }}           # [osx]
+    - clang-tools                      # [osx]
+    - gfortran_osx-64 {{ osxfortran }} # [osx]
     - make  # [unix]
   host: []
   run:

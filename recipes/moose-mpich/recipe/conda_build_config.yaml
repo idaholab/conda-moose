@@ -15,3 +15,33 @@ moose_compilers:
 
 pin_run_as_build:
   moose_compilers: x.x.x
+
+libllvm:
+  - 9.0.1 ha1b3eb9_0
+
+compilerrt:
+  - 9.0.1 h6a512c6_3
+
+clangxx:
+  - 9.0.1 default_hf57f61e_0
+
+clangosx:
+  - 9.0.1 h05bbb7f_0
+
+clang:
+  - 9.0.1 default_hf57f61e_0
+
+osxfortran:
+  - 7.3.0 h22b1bf0_7
+
+gcc:
+  - 7.3.0 h553295d_16
+
+gxx:
+  - 7.3.0 h553295d_16
+
+fortran:
+  - 7.3.0 h553295d_16
+
+gccimpl:
+  - 7.3.0 hd420e75_5
