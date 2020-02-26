@@ -28,6 +28,7 @@ requirements:
     - compiler-rt {{ compilerrt }}     # [osx]
     - libllvm9 {{ libllvm }}           # [osx]
     - clang-tools                      # [osx]
+    - llvm-openmp {{ llvmopenmp }}     # [osx]
     - gfortran_osx-64 {{ osxfortran }} # [osx]
     - make  # [unix]
   host: []

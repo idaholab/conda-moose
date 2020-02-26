@@ -29,6 +29,9 @@ clangosx:
 clang:
   - 9.0.1 default_hf57f61e_0
 
+llvmopenmp:
+  - 9.0.1 h28b9765_2
+
 osxfortran:
   - 7.3.0 h22b1bf0_7
 
