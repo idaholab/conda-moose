@@ -31,6 +31,7 @@ requirements:
     - clang-tools                      # [osx]
     - llvm-openmp {{ llvmopenmp }}     # [osx]
     - gfortran_osx-64 {{ osxfortran }} # [osx]
+    - libclang {{ libclang }}          # [osx]
     - make  # [unix]
   host: []
   run:

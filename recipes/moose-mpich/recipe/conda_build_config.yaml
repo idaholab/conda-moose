@@ -19,8 +19,11 @@ pin_run_as_build:
 libllvm:
   - 9.0.1 ha1b3eb9_0
 
+libclang:
+  - 9.0.1 default_hf57f61e_0
+
 compilerrt:
-  - 9.0.1 h6a512c6_3
+  - 9.0.1 h6a512c6_0
 
 clangxx:
   - 9.0.1 default_hf57f61e_0
