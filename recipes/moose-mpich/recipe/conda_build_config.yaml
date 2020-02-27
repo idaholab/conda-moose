@@ -28,6 +28,9 @@ clangxx:
 clangosx:
   - 9.0.1 h05bbb7f_0
 
+clangxxosx:
+  - 9.0.1 h05bbb7f_0
+
 clang:
   - 9.0.1 default_hf57f61e_0
 

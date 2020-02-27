@@ -25,6 +25,7 @@ requirements:
     - clang {{ clang }}                # [osx]
     - clang_osx-64 {{ clangosx }}      # [osx]
     - clangxx {{ clangxx }}            # [osx]
+    - clangxx_osx-64 {{ clangxxosx }}  # [osx]
     - compiler-rt {{ compilerrt }}     # [osx]
     - libllvm9 {{ libllvm }}           # [osx]
     - clang-tools                      # [osx]
