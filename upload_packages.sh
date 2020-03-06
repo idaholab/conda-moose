@@ -44,10 +44,8 @@ fi
 if [ -z "$CONDA_PREFIX" ]; then
     printf "CONDA_PREFIX not set.\n"
     exit 1
-fi
-
-if ! [ -d "${CONDA_PREFIX}" ]; then
-    printf "CONDA_PACKAGE: $CONDA_PACKAGE directory is not where I am expecting it to be. Did someone change CONDA_PACKAGE= in the recipe?\n"
+elif ! [ -d "${CONDA_PREFIX}" ]; then
+    printf "CONDA_PREFIX: $CONDA_PREFIX directory is not where I am expecting it to be. Did someone change CIVET_CONDA_PACKAGES= in the recipe?\n"
     exit 1
 fi
 
