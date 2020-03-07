@@ -69,7 +69,7 @@ export BZ2DIR="${CONDA_PREFIX}/conda-bld/${ARCH}"
 if beginswith "Pull" "$CIVET_EVENT_CAUSE"; then
     printf "Uploading to HPC for further testing...\n"
     ssh -oStrictHostKeyChecking=no -q hpcsc.hpc.inl.gov mkdir -p /data/ssl/conda_packages/moose/${ARCH}
-    print_and_run rsync -raz "$BZ2DIR" hpcsc.hpc.inl.gov:/data/ssl/conda_packages/moose/
+    print_and_run rsync -raz "$BZ2DIR" hpcsc.hpc.inl.gov:/data/ssl/conda_packages/moose/._temp_packages/
     exitIfReturnCode $?
 
 # Merges to devel -copy binaries to MOOSEFRAMEWORK.ORG
