@@ -1,8 +1,8 @@
 {% set version = "3.3.2" %}
-{% set mpich_build = 2 %}
+{% set mpich_build = 4 %}
 
 package:
-  name: mpich-mpi
+  name: moose-mpich
   version: {{ version }}
 
 source:
@@ -13,32 +13,36 @@ source:
 build:
   number: {{ mpich_build }}
   skip: True  # [win]
+  run_exports:
+    - {{ pin_subpackage('moose-mpich', max_pin='x.x') }}
 
 requirements:
+  build:
+    - gcc_linux-64 {{ gcc }}                 # [linux]
+    - gxx_linux-64 {{ gxx }}                 # [linux]
+    - gfortran_linux-64 {{ fortran }}        # [linux]
+    - gcc_impl_linux-64 {{ gccimpl }}        # [linux]
+    - clang {{ clang }}                      # [osx]
+    - clang_osx-64 {{ clangosx }}            # [osx]
+    - clangxx {{ clangxx }}                  # [osx]
+    - clangxx_osx-64 {{ clangxxosx }}        # [osx]
+    - compiler-rt {{ compilerrt }}           # [osx]
+    - compiler-rt_osx-64 {{ compilerrtosx }} # [osx]
+    - libllvm9 {{ libllvm }}                 # [osx]
+    - clang-tools                            # [osx]
+    - llvm-openmp {{ llvmopenmp }}           # [osx]
+    - gfortran_osx-64 {{ osxfortran }}       # [osx]
+    - libclang {{ libclang }}                # [osx]
+    - make  # [unix]
+  host: []
   run:
     - moose-compilers {{ moose_compilers }}
-
-outputs:
-  - name: moose-mpich
-    script: build-mpi.sh
-    build:
-      run_exports:
-        - {{ pin_subpackage('moose-mpich', max_pin='x.x') }}
-    requirements:
-      build:
-        - {{ compiler('c') }}
-        - {{ compiler('cxx') }}
-        - {{ compiler('fortran') }}
-        - make  # [unix]
-      host: []
-      run:
-        - moose-compilers {{ moose_compilers }}
-        - mpi 1.0 mpich
-    test:
-      script: run_test.sh
-      files:
-        - mpiexec.sh
-        - tests/helloworld.sh
+    - mpi 1.0 mpich
+test:
+  script: run_test.sh
+  files:
+    - mpiexec.sh
+    - tests/helloworld.sh
 
 about:
   home: http://www.mpich.org/
