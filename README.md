@@ -38,4 +38,3 @@ The MOOSE team will make periodic updates to the conda packages. To stay up-to-d
 conda activate moose
 conda update --all
 ```
-
