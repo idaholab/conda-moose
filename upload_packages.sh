@@ -44,10 +44,8 @@ fi
 if [ -z "$CONDA_PREFIX" ]; then
     printf "CONDA_PREFIX not set.\n"
     exit 1
-fi
-
-if ! [ -d "${CONDA_PREFIX}" ]; then
-    printf "CONDA_PACKAGE: $CONDA_PACKAGE directory is not where I am expecting it to be. Did someone change CONDA_PACKAGE= in the recipe?\n"
+elif ! [ -d "${CONDA_PREFIX}" ]; then
+    printf "CONDA_PREFIX: $CONDA_PREFIX directory is not where I am expecting it to be. Did someone change CIVET_CONDA_PACKAGES= in the recipe?\n"
     exit 1
 fi
 
@@ -71,7 +69,7 @@ export BZ2DIR="${CONDA_PREFIX}/conda-bld/${ARCH}"
 if beginswith "Pull" "$CIVET_EVENT_CAUSE"; then
     printf "Uploading to HPC for further testing...\n"
     ssh -oStrictHostKeyChecking=no -q hpcsc.hpc.inl.gov mkdir -p /data/ssl/conda_packages/moose/${ARCH}
-    print_and_run rsync -raz "$BZ2DIR" hpcsc.hpc.inl.gov:/data/ssl/conda_packages/moose/
+    print_and_run rsync -raz "$BZ2DIR" hpcsc.hpc.inl.gov:/data/ssl/conda_packages/moose/._temp_packages/
     exitIfReturnCode $?
 
 # Merges to devel -copy binaries to MOOSEFRAMEWORK.ORG

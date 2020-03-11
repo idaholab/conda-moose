@@ -31,6 +31,8 @@ function beginswith()
 }
 
 if beginswith "Pull" "$CIVET_EVENT_CAUSE"; then
+  printf "Executing cleaning command on hpcsc..."
+  ssh -oStrictHostKeyChecking=no -q hpcsc.hpc.inl.gov "source /etc/profile; /data/ssl/conda_packages/clear_channel.sh"
   printf "Executing indexing command on hpcsc..."
   ssh -oStrictHostKeyChecking=no -q hpcsc.hpc.inl.gov "source /etc/profile; /data/ssl/conda_packages/index_channels.sh"
   exitIfReturnCode $?
