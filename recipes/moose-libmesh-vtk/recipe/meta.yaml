@@ -1,18 +1,20 @@
+{% set build = 0 %}
+
 {% set vtk_version = vtk_version %}
 {% set friendly_version =  friendly_version %}
-{% set vtk_build = 3 %}
+{% set version =  vtk_version + "." + build|string %}
 {% set sha256 = sha256 %}
 
 package:
   name: moose-libmesh-vtk
-  version: {{ vtk_version }}
+  version: {{ version }}
 
 source:
   url: https://www.vtk.org/files/release/{{ friendly_version }}/VTK-{{ vtk_version }}.tar.gz
   sha256: {{ sha256 }}
 
 build:
-  number: {{ vtk_build }}
+  number: {{ build }}
   skip: true  # [win]
 
 requirements:
