@@ -31,13 +31,13 @@ function beginswith()
 }
 
 if beginswith "Pull" "$CIVET_EVENT_CAUSE"; then
-  printf "Executing cleaning command on hpcsc..."
+  printf "Executing cleaning command on hpcsc...\n"
   ssh -oStrictHostKeyChecking=no -q hpcsc.hpc.inl.gov "source /etc/profile; /data/ssl/conda_packages/clear_channel.sh"
-  printf "Executing indexing command on hpcsc..."
+  printf "Executing indexing command on hpcsc...\n"
   ssh -oStrictHostKeyChecking=no -q hpcsc.hpc.inl.gov "source /etc/profile; /data/ssl/conda_packages/index_channels.sh"
   exitIfReturnCode $?
 else
-  printf "Executing indexing command on mooseframework.org..."
+  printf "Executing indexing command on mooseframework.org...\n"
   ssh -oStrictHostKeyChecking=no -q mooseframework.org "source /etc/profile; /var/moose/conda/index_channels.sh"
   exitIfReturnCode $?
 fi
