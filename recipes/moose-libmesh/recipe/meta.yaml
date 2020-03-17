@@ -1,8 +1,8 @@
-{% set name = "moose-libmesh" %}
-{% set version = "ef7dd34ad117998e7b7ef909e85a6ae53f57e057" %}
-{% set sha256 = "0003ae875911070d8d33f1aa3db748c6e7003918f4d90c7cd98d5d8bfb2505d3" %}
-{% set friendly_version = "2020.03.17.01" %}
-{% set libmesh_build = 0 %}
+{% set build = 0 %}
+{% set version = "2020.03.17." + build %}
+
+{% set libmesh_version = "ef7dd34ad117998e7b7ef909e85a6ae53f57e057" %}
+{% set libmesh_sha256 = "0003ae875911070d8d33f1aa3db748c6e7003918f4d90c7cd98d5d8bfb2505d3" %}
 
 {% set timpi_version = "e0850710c516f8ee6cfb878d132a149f89dbf9dd" %}
 {% set timpi_sha256 = "eb0d80da298cfcdd28b17c49e0f8e03c0407b6d4e4929ee1a42b3b1d144b461d" %}
@@ -11,14 +11,14 @@
 {% set metaphysicl_sha256 = "d40a3c9780d1d5ec16f83c213a0bed7965325877dd729e4c3d59bde7424fbe41" %}
 
 package:
-  name: {{ name }}
-  version: {{ friendly_version }}
+  name: moose-libmesh
+  version: {{ version }}
 
 source:
-  - url: https://github.com/libMesh/libmesh/archive/{{ version }}.tar.gz
-    fn: libmesh-{{ version }}.tar.gz
+  - url: https://github.com/libMesh/libmesh/archive/{{ libmesh_version }}.tar.gz
+    fn: libmesh-{{ libmesh_version }}.tar.gz
     folder: src/github.com/libMesh/libmesh
-    sha256: {{ sha256 }}
+    sha256: {{ libmesh_sha256 }}
 
   - url: https://github.com/libMesh/TIMPI/archive/{{ timpi_version }}.tar.gz
     fn: timp-{{ timpi_version }}.tar.gz
@@ -31,7 +31,7 @@ source:
     sha256: {{ metaphysicl_sha256 }}
 
 build:
-  number: {{ libmesh_build }}
+  number: {{ build }}
   skip: true                                            # [win]
 
 requirements:

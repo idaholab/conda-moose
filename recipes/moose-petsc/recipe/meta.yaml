@@ -1,4 +1,7 @@
-{% set version = "3.11.4.01" %}
+{% set build = 0 %}
+{% set download_version = "3.11.4" %}
+
+{% set version = download_version + "." + build %}
 {% set sha256 = "319cb5a875a692a67fe5b1b90009ba8f182e21921ae645d38106544aff20c3c1" %}
 {% set petsc_build = 0 %}
 
@@ -7,8 +10,8 @@ package:
   version: {{ version }}
 
 source:
-  fn: petsc-{{ version }}.tar.gz
-  url: http://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-{{ version }}.tar.gz
+  fn: petsc-{{ download_version }}.tar.gz
+  url: http://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-{{ download_version }}.tar.gz
   sha256: {{ sha256 }}
   patches:
     - ignore-not-invalid.patch
@@ -16,7 +19,7 @@ source:
 
 build:
   skip: true  # [win]
-  number: {{ petsc_build }}
+  number: {{ build }}
   run_exports:
     - {{ pin_subpackage('moose-petsc', max_pin='x.x')}}
 
@@ -27,7 +30,7 @@ requirements:
 
   host:
     - cmake
-    - moose-mpich
+    - moose-mpich {{ moose_mpich }}
     - libblas     {{ libblas }}     # [osx]
     - libcblas    {{ libcblas }}    # [osx]
     - liblapack   {{ liblapack }}   # [osx]
@@ -35,7 +38,7 @@ requirements:
 
   run:
     - cmake
-    - moose-mpich
+    - moose-mpich {{ moose_mpich }}
     - libblas     {{ libblas }}     # [osx]
     - libcblas    {{ libcblas }}    # [osx]
     - liblapack   {{ liblapack }}   # [osx]

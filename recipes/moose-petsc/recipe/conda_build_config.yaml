@@ -14,7 +14,7 @@ mpi:
   - moose-mpich
 
 moose_mpich:
-  - 3.3.2.01
+  - 3.3.2.0
 
 libblas:
   - 3.8.0 15_openblas # [osx]
