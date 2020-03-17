@@ -17,7 +17,8 @@ SHORT_VTK_NAME:
   - 6.3
 
 moose_petsc:
- - 3.11.4
+ - 3.11.4 h42030b3_5           # [osx]
+ - 3.11.4 h82e9ade_5           # [linux]
 
 moose_libmesh_vtk:
  - 6.3.0
