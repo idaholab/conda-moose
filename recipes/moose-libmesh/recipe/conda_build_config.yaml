@@ -16,16 +16,15 @@ mpi:
 SHORT_VTK_NAME:
   - 6.3
 
-moose_petsc:
- - 3.11.4 h42030b3_5           # [osx]
- - 3.11.4 h82e9ade_5           # [linux]
-
-moose_libmesh_vtk:
- - 6.3.0
-
 netcdf:
  - 4.6.2
 
+moose_petsc:
+ - 3.11.4.0
+
+moose_libmesh_vtk:
+ - 6.3.0.0
+
 pin_run_as_build:
-  moose_petsc: x.x.x
-  moose_libmesh_vtk: x.x.x
+  moose_petsc: x.x.x.x
+  moose_libmesh_vtk: x.x.x.x

@@ -1,9 +1,10 @@
-{% set name = "moose" %}
-{% set version = "2020.03.16" %}
+{% set build = 0 %}
+{% set version = "2020.03.17." + build|string %}
+
 {% set sha256 = "1f9e83570f0670511998f609a2b4b3ddd5dc02563b052b6cd3af24a59452cece" %}
 
 package:
-  name: {{ name }}
+  name: moose
   version: {{ version }}
 
 source:
@@ -11,7 +12,7 @@ source:
   sha256: {{ sha256 }}
 
 build:
-  number: 1  # [linux,osx]
+  number: 0  # [linux,osx]
   skip: true # [win]
 
 requirements:
@@ -19,7 +20,7 @@ requirements:
     - moose-libmesh {{ moose_libmesh }}
 
   run:
-    - moose-libmesh
+    - moose-libmesh {{ moose_libmesh }}
 
 test:
   commands:
