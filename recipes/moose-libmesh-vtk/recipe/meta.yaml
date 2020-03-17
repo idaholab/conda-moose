@@ -2,7 +2,7 @@
 
 {% set vtk_version = vtk_version %}
 {% set friendly_version =  friendly_version %}
-{% set version =  vtk_version + "." + build %}
+{% set version =  vtk_version + "." + build|string %}
 {% set sha256 = sha256 %}
 
 package:

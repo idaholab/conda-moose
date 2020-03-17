@@ -1,7 +1,7 @@
 {% set build = 0 %}
 {% set download_version = "3.3.2" %}
 
-{% set version = download_version + "." + build %}
+{% set version = download_version + "." + build|string %}
 
 package:
   name: moose-mpich
