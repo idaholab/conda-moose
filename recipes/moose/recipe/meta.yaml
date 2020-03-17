@@ -11,7 +11,7 @@ source:
   sha256: {{ sha256 }}
 
 build:
-  number: 0  # [linux,osx]
+  number: 1  # [linux,osx]
   skip: true # [win]
 
 requirements:
