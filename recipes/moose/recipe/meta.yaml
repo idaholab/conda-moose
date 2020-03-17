@@ -20,7 +20,7 @@ requirements:
     - moose-libmesh {{ moose_libmesh }}
 
   run:
-    - moose-libmesh
+    - moose-libmesh {{ moose_libmesh }}
 
 test:
   commands:
