@@ -1,8 +1,8 @@
 {% set name = "moose-libmesh" %}
 {% set version = "ef7dd34ad117998e7b7ef909e85a6ae53f57e057" %}
 {% set sha256 = "0003ae875911070d8d33f1aa3db748c6e7003918f4d90c7cd98d5d8bfb2505d3" %}
-{% set friendly_version = "2020.03.16" %}
-{% set libmesh_build = 1 %}
+{% set friendly_version = "2020.03.17.01" %}
+{% set libmesh_build = 0 %}
 
 {% set timpi_version = "e0850710c516f8ee6cfb878d132a149f89dbf9dd" %}
 {% set timpi_sha256 = "eb0d80da298cfcdd28b17c49e0f8e03c0407b6d4e4929ee1a42b3b1d144b461d" %}

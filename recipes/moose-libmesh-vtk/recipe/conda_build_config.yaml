@@ -11,7 +11,7 @@ MACOSX_DEPLOYMENT_TARGET:      # [osx]
   - 10.9                       # [osx]
 
 vtk_version:
-  - 6.3.0
+  - 6.3.0.01
 
 friendly_version:
   - 6.3

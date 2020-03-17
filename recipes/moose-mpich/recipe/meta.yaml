@@ -1,5 +1,5 @@
-{% set version = "3.3.2" %}
-{% set mpich_build = 4 %}
+{% set version = "3.3.2.01" %}
+{% set mpich_build = 0 %}
 
 package:
   name: moose-mpich
