@@ -1,19 +1,19 @@
 {% set build = 0 %}
-{% set download_version = "3.3.2" %}
-
-{% set version = download_version + "." + build|string %}
+{% set strbuild = "build_" + build|string %}
+{% set version = "3.3.2" %}
 
 package:
   name: moose-mpich
   version: {{ version }}
 
 source:
-  fn: mpich-{{ download_version }}.tar.gz
-  url: http://www.mpich.org/static/downloads/{{ download_version }}/mpich-{{ download_version }}.tar.gz
+  fn: mpich-{{ version }}.tar.gz
+  url: http://www.mpich.org/static/downloads/{{ version }}/mpich-{{ version }}.tar.gz
   sha256: 4bfaf8837a54771d3e4922c84071ef80ffebddbb6971a006038d91ee7ef959b9
 
 build:
   number: {{ build }}
+  string: {{ strbuild }}
   skip: True  # [win]
   run_exports:
     - {{ pin_subpackage('moose-mpich', max_pin='x.x') }}
