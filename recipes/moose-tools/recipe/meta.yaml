@@ -18,6 +18,7 @@ build:
 requirements:
   build:
     - python {{ python }}
+    - vtk {{ vtk }}
   run:
     - numpy
     - pyqt
@@ -31,7 +32,7 @@ requirements:
     - mock
     - lxml
     - scikit-image
-    - vtk 8.1.2
+    - vtk {{ vtk }}
     - pylatexenc
     - jinja2
     - mako
