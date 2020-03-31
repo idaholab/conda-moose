@@ -77,8 +77,7 @@ else
 fi
 
 # Clear any previous build environment
-print_and_run conda clean --all --yes
-exitIfReturnCode $?
+conda clean --all --yes 2>&1 > /dev/null
 print_and_run conda build purge-all
 exitIfReturnCode $?
 
