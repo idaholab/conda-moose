@@ -54,6 +54,8 @@ test:
   commands:
     - test -f $PREFIX/libmesh/lib/libmesh_opt.dylib     # [osx]
     - test -f $PREFIX/libmesh/lib/libmesh_opt.so        # [linux]
+    - test -f $PREFIX/libmesh/lib/libtimpi_opt.dylib    # [osx]
+    - test -f $PREFIX/libmesh/lib/libtimpi_opt.so       # [linux]
     - test -f $PREFIX/libmesh/lib/libmetaphysicl.dylib  # [osx]
     - test -f $PREFIX/libmesh/lib/libmetaphysicl.so     # [linux]
 
