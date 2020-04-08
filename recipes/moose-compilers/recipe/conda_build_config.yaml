@@ -14,6 +14,9 @@ libpng:
   - 1.6.37 h2573ce8_0 # [osx]
   - 1.6.37 hed695b0_0 # [linux]
 
+libcxx:
+  - 9.0.1 2           # [linux]
+
 libllvm:
   - 9.0.1 ha1b3eb9_0
 
