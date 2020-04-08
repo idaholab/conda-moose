@@ -23,7 +23,6 @@ requirements:
     - gxx_linux-64 {{ gxx }}                 # [linux]
     - gfortran_linux-64 {{ fortran }}        # [linux]
     - gcc_impl_linux-64 {{ gccimpl }}        # [linux]
-    - libcxx {{ libcxx }}                    # [linux]
     - clang {{ clang }}                      # [osx]
     - clang_osx-64 {{ clangosx }}            # [osx]
     - clangxx {{ clangxx }}                  # [osx]
@@ -36,6 +35,7 @@ requirements:
     - gfortran_osx-64 {{ osxfortran }}       # [osx]
     - libclang {{ libclang }}                # [osx]
     - libpng {{ libpng }}
+    - libcxx {{ libcxx }}
 
 test:
   commands:
