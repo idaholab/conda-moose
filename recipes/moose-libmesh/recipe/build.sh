@@ -60,7 +60,7 @@ EOF`
                      --prefix=${PREFIX}/libmesh \
                      --with-vtk-lib=${BUILD_PREFIX}/libmesh-vtk/lib \
                      --with-vtk-include=${BUILD_PREFIX}/libmesh-vtk/include/vtk-${SHORT_VTK_NAME} \
-                     --with-methods="opt dbg devel"
+                     --with-methods="opt dbg devel oprof"
 
 make -j $CPU_COUNT
 make install
