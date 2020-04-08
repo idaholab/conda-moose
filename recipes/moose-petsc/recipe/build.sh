@@ -39,11 +39,8 @@ BUILD_CONFIG=`cat <<"EOF"
   --with-ssl=0 \
   --with-openmp=1 \
   --with-debugging=0 \
-  --with-clib-autodetect=0 \
   --with-cxx-dialect=C++11 \
   --with-shared-libraries=1 \
-  --with-cxxlib-autodetect=0 \
-  --with-fortranlib-autodetect=0 \
   --download-mumps=1 \
   --download-hypre=1 \
   --download-metis=1 \
@@ -64,7 +61,6 @@ python ./configure ${BUILD_CONFIG} ${ADDITIONAL_ARGS:-} \
        F77="mpifort" \
        CFLAGS="${TUNING}" \
        CXXFLAGS="${TUNING}" \
-       LIBS="-lmpifort -lgfortran" \
        LDFLAGS="${LDFLAGS:-}" \
        --prefix=$PREFIX || (cat configure.log && exit 1)
 
